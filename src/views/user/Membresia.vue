@@ -1,4 +1,3 @@
-
 <template>
- <router-view/>
+  <h1>Membresia</h1>
 </template>
