@@ -1,4 +1,3 @@
-
 <template>
- <router-view/>
+  <h1>REportes</h1>
 </template>

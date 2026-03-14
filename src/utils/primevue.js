@@ -3,7 +3,7 @@ import PrimeVue from 'primevue/config'
 //servicios
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice'
-/*
+
 //componentes
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
@@ -18,7 +18,7 @@ import Textarea from 'primevue/textarea';
 import InputNumber from 'primevue/inputnumber';
 import Dropdown from 'primevue/dropdown';
 import FileUpload from 'primevue/fileupload';
-*/
+
 
 export default function setupPrimeVue(app){
 
@@ -27,7 +27,7 @@ export default function setupPrimeVue(app){
     //registramos los servicios
     app.use(ToastService)
     app.use(ConfirmationService)
-    /*
+
     //componentes
     app.component('Button', Button)
     app.component('Dialog', Dialog)
@@ -42,6 +42,7 @@ export default function setupPrimeVue(app){
     app.component('InputNumber', InputNumber)
     app.component('Dropdown', Dropdown)
     app.component('FileUpload', FileUpload)
-    */
+
 }
 
+ 
