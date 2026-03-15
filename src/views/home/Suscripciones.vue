@@ -57,7 +57,7 @@
             </p>
 
             <ul class="space-y-4">
-               <li class="flex items-start gap-3 text-sm text-gray-300">
+              <li class="flex items-start gap-3 text-sm text-gray-300">
                   <i class="pi pi-check text-gym-accent mt-0.5 text-xs"></i>
                   <span>Acceso completo a instalaciones</span>
                </li>
