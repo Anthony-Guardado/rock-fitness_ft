@@ -5,7 +5,12 @@ import HomeView from '@/views/home/HomeView.vue'
 import Login from '@/views/auth/Login.vue'
 import RecuperarContrasena from '@/views/auth/RecuperarContrasena.vue'
     import RestablecerContrasena from '@/views/auth/RestablecerContrasena.vue'
+import GestionUsuarios from '@/views/admin/GestionUsuarios.vue'
+import GestionMembresias from '@/views/admin/GestionMembresias.vue'
+import Reportes from '@/views/admin/Reportes.vue'
 
+
+    
 // import Register from '@/views/auth/Register.vue' // Lo descomentamos cuando lo creemos
 
 const router = createRouter({
@@ -45,7 +50,22 @@ const router = createRouter({
       name: 'suscripciones',
       // Aquí es donde Vue enlaza la URL con tu archivo físico
       component: () => import('@/views/home/Suscripciones.vue')
-    }
+    },
+      {
+      path:'/admin',
+      component: () => import('@/components/layouts/AdminLayout.vue'),
+      },
+      {
+        path:'/gestion-usuarios',
+        name:'gestion-usuarios',
+        component: GestionUsuarios
+      },
+      
+
+     
+
+     // Admin (rutas anidadas dentro del AdminLayout)
+ 
 
     // RUTA DEL REGISTRO (Preparada para el futuro)
     /*
@@ -63,6 +83,7 @@ const router = createRouter({
       name: 'user-dashboard',
       component: () => import('@/views/dashboard/UserDashboard.vue')
     },
+    
     {
       path: '/admin/dashboard',
       name: 'admin-dashboard',
