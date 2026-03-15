@@ -5,6 +5,10 @@ import HomeView from '@/views/home/HomeView.vue'
 import Login from '@/views/auth/Login.vue'
 import RecuperarContrasena from '@/views/auth/RecuperarContrasena.vue'
     import RestablecerContrasena from '@/views/auth/RestablecerContrasena.vue'
+import UserLayout from '@/components/layouts/UserLayout.vue'
+import UserDashboard from '@/views/user/UserDashboard.vue'
+import HistorialPagos from '@/views/user/HistorialPagos.vue'
+
 
 // import Register from '@/views/auth/Register.vue' // Lo descomentamos cuando lo creemos
 
@@ -45,30 +49,25 @@ const router = createRouter({
       name: 'suscripciones',
       // Aquí es donde Vue enlaza la URL con tu archivo físico
       component: () => import('@/views/home/Suscripciones.vue')
+    },
+
+    //Rutas de interfaces de cliente y admin
+
+    {
+    path: '/dashboard',
+    component: UserLayout,
+    children: [
+      { path: '', component: UserDashboard },
+      { path: 'pagos', component: HistorialPagos },
+    ]
+    },
+
+    {
+      path:"/admin/dashboard",
+      component: () => import("@/components/layouts/AdminLayout.vue"),
+      
     }
 
-    // RUTA DEL REGISTRO (Preparada para el futuro)
-    /*
-    {
-      path: '/register',
-      name: 'register',
-      component: Register
-    },
-    */
-
-    // RUTAS DE LOS DASHBOARDS (Preparadas para cuando las creemos)
-    /*
-    {
-      path: '/user/dashboard',
-      name: 'user-dashboard',
-      component: () => import('@/views/dashboard/UserDashboard.vue')
-    },
-    {
-      path: '/admin/dashboard',
-      name: 'admin-dashboard',
-      component: () => import('@/views/dashboard/AdminDashboard.vue')
-    }
-    */
   ]
 })
 
