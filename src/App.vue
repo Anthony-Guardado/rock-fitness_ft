@@ -1,4 +1,7 @@
-
 <template>
- <router-view/>
+  <router-view />
 </template>
+
+<script setup>
+// Aquí no necesitamos nada por ahora
+</script>
