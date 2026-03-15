@@ -36,7 +36,7 @@ export const useAuthStore = defineStore('auth', {
 
         // Redirección estricta para nuestros 2 roles
         if (this.isAdmin) {
-          router.push('/admin/dashboard')
+          router.push('/admin/AdminDashboard')
         } else {
           router.push('/dashboard')
         }

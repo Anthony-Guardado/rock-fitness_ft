@@ -4,17 +4,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/home/HomeView.vue'
 import Login from '@/views/auth/Login.vue'
 import RecuperarContrasena from '@/views/auth/RecuperarContrasena.vue'
-    import RestablecerContrasena from '@/views/auth/RestablecerContrasena.vue'
-<<<<<<< HEAD
+import RestablecerContrasena from '@/views/auth/RestablecerContrasena.vue'
 import UserLayout from '@/components/layouts/UserLayout.vue'
 import UserDashboard from '@/views/user/UserDashboard.vue'
 import HistorialPagos from '@/views/user/HistorialPagos.vue'
+import AdminLayout from '@/components/layouts/AdminLayout.vue'
 
-=======
-import GestionUsuarios from '@/views/admin/GestionUsuarios.vue'
-import GestionMembresias from '@/views/admin/GestionMembresias.vue'
-import Reportes from '@/views/admin/Reportes.vue'
->>>>>>> origin/rama_osito
 
 
 
@@ -61,6 +56,7 @@ const router = createRouter({
 
     //Rutas de interfaces de cliente y admin
 
+      //cliente
     {
     path: '/dashboard',
     component: UserLayout,
@@ -69,11 +65,39 @@ const router = createRouter({
       { path: 'pagos', component: HistorialPagos },
     ]
     },
-
+      //admin
     {
-      path:"/admin/dashboard",
-      component: () => import("@/components/layouts/AdminLayout.vue"),
+      path:"/admin",
+      component: AdminLayout,
+      meta: { requiresAuth: true, role: ["ADMIN"]},
 
+      children: [
+        {
+          path: 'AdminDashboard',
+          name: "admin-Dashboard",
+          component: () => import("@/views/admin/AdminDashboard.vue"),
+        },
+        {
+          path: "GestionMembresias",
+          name: "GestionMembresiass",
+          component: () => import("@/views/admin/GestionMembresias.vue"),
+        },
+        {
+          path: "GestionPagos",
+          name: "admin-pagos",
+          component: () => import("@/views/admin/GestionPagos.vue"),
+        },
+        {
+          path: 'GestionUsuarios',
+          name: "admin-usuarios",
+          component: () => import("@/views/admin/GestionUsuarios.vue"),
+        },
+        {
+          path: 'Reportes',
+          name: "admin-reportes",
+          component: () => import("@/views/admin/Reportes.vue"),
+        }
+      ]
     }
 
   ]
