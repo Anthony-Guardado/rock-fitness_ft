@@ -5,8 +5,10 @@
     <div class="bg-[#1F232A] border border-[#23374D] rounded-xl p-8 flex flex-col items-center gap-4">
 
       <!-- Foto de perfil -->
-      <div class="w-24 h-24 rounded-full bg-[#242830] border-2 border-[#4FC3F7] flex items-center justify-center">
-        <i class="pi pi-user text-[#4FC3F7] text-4xl"></i>
+      <div
+        class="w-24 h-24 rounded-full bg-[#242830] border-2 border-[#4FC3F7] flex items-center justify-center overflow-hidden">
+        <img v-if="fotoUrl" :src="fotoUrl" class="w-full h-full object-cover rounded-full" />
+        <i v-else class="pi pi-user text-[#4FC3F7] text-4xl"></i>
       </div>
 
       <!-- Nombre y correo -->
@@ -17,19 +19,27 @@
 
       <!-- Estado membresía -->
       <div class="w-full bg-[#242830] border border-[#23374D] rounded-lg p-4 flex flex-col gap-3 mt-2">
+
+        <h3 class="text-[#B4B4BC] text-sm">Datos:</h3>
+        <hr>
+
         <div class="flex items-center justify-between">
           <span class="text-[#B4B4BC] text-sm">Estado</span>
           <span class="text-xs font-bold px-3 py-1 rounded-full bg-green-500/20 text-green-400">
-            Activa
+
           </span>
         </div>
         <div class="flex items-center justify-between">
-          <span class="text-[#B4B4BC] text-sm">Plan</span>
-          <span class="text-[#F5F5F5] text-sm font-semibold">Premium</span>
+          <span class="text-[#B4B4BC] text-sm">Membresia</span>
+          <span class="text-[#F5F5F5] text-sm font-semibold"></span>
         </div>
         <div class="flex items-center justify-between">
           <span class="text-[#B4B4BC] text-sm">Expira el</span>
-          <span class="text-[#F5F5F5] text-sm font-semibold">30/06/2025</span>
+          <span class="text-[#F5F5F5] text-sm font-semibold"></span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-[#B4B4BC] text-sm">Teléfono</span>
+          <span class="text-[#F5F5F5] text-sm font-semibold"></span>
         </div>
       </div>
 
@@ -75,7 +85,7 @@
       </template>
     </Dialog>
 
-    <!-- ===== MODAL CAMBIAR PLAN ===== -->
+    <!--MODAL CAMBIAR PLAN-->
     <Dialog v-model:visible="modalPlan" header="CAMBIAR PLAN"
       :style="{ width: '30rem', background: '#1F232A', border: '1px solid #23374D' }" :modal="true">
       <div class="flex flex-col gap-4 pt-2">

@@ -11,15 +11,14 @@
       </template>
     </Toolbar>
 
-    <DataTable
-      :value="pagosFiltrados"
-      responsiveLayout="scroll"
-      stripedRows
-      class="p-datatable-sm dark-table"
-    >
+    <DataTable :value="pagos" responsiveLayout="scroll" stripedRows class="p-datatable-sm dark-table">
       <Column field="referencia" header="Referencia" />
 
-      <Column field="tipo_membresia" header="Tipo membresía" />
+      <Column field="tipo_membresia" header="Tipo membresía">
+        <template #body="slotProps">
+          {{ slotProps.data.detalle_membresia?.membresia?.nombre ?? 'N/A' }}
+        </template>
+      </Column>
 
       <Column field="monto" header="Monto">
         <template #body="slotProps">
@@ -33,7 +32,11 @@
         </template>
       </Column>
 
-      <Column field="fecha" header="Fecha" />
+      <Column field="fecha" header="Fecha">
+        <template #body="slotProps">
+          {{ formatFecha(slotProps.data.fecha) }}
+        </template>
+      </Column>
 
       <Column field="descripcion_metodo_pago" header="Método de pago">
         <template #body="slotProps">
@@ -47,51 +50,61 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+// PagoTablas.vue
+import { ref, onMounted } from 'vue'
+import pagoService from '@/services/pagoService'
+import Tag from 'primevue/tag'
+
+const pagos = ref([])
+const loading = ref(false)
+
+onMounted(async () => {
+  loading.value = true
+  try {
+    const { data } = await pagoService.getMisPagos()
+    pagos.value = data.pagos
+  } catch (error) {
+    console.error(error)
+  } finally {
+    loading.value = false
+  }
+})
+
+const formatFecha = (fecha) => {
+  if (!fecha) return ''
+  const d = new Date(fecha)
+  return `${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()}`
+}
+
+const getSeverity = (estado) => {
+  if (estado === 'pagado') return 'success'
+  if (estado === 'pendiente') return 'warning'
+  if (estado === 'fallido') return 'danger'
+  return null
+}
 
 const buscar = ref('')
 
-const pagos = ref([
-  { referencia: 'REF-ABC123', tipo_membresia: 'Premium', monto: '15.00', estado: 'pagado', fecha: '2025-01-01', descripcion_metodo_pago: 'Tarjeta xxxx-xxxx-xxxx-9849' },
-  { referencia: 'REF-DEF456', tipo_membresia: 'Básica', monto: '30.00', estado: 'pendiente', fecha: '2025-02-01', descripcion_metodo_pago: 'Tarjeta xxxx-xxxx-xxxx-1234' },
-  { referencia: 'REF-GHI789', tipo_membresia: 'VIP', monto: '60.00', estado: 'fallido', fecha: '2025-03-01', descripcion_metodo_pago: null },
-])
-
-const pagosFiltrados = computed(() => {
-  if (!buscar.value) return pagos.value
-  return pagos.value.filter(p =>
-    p.referencia.toLowerCase().includes(buscar.value.toLowerCase()) ||
-    p.tipo_membresia.toLowerCase().includes(buscar.value.toLowerCase()) ||
-    p.estado.toLowerCase().includes(buscar.value.toLowerCase())
-  )
-})
-
-const getSeverity = (estado) => {
-  if (estado === 'pagado')    return 'success'
-  if (estado === 'pendiente') return 'warning'
-  if (estado === 'fallido')   return 'danger'
-  return null
-}
 </script>
 
 <style>
-.dark-table .p-datatable-thead > tr > th {
+.dark-table .p-datatable-thead>tr>th {
   background: #242830 !important;
   color: #F5F5F5 !important;
   border-color: #23374D !important;
 }
 
-.dark-table .p-datatable-tbody > tr {
+.dark-table .p-datatable-tbody>tr {
   background: #1F232A !important;
   color: #F5F5F5 !important;
   border-color: #23374D !important;
 }
 
-.dark-table .p-datatable-tbody > tr:nth-child(even) {
+.dark-table .p-datatable-tbody>tr:nth-child(even) {
   background: #242830 !important;
 }
 
-.dark-table .p-datatable-tbody > tr:hover {
+.dark-table .p-datatable-tbody>tr:hover {
   background: #2a2f3a !important;
 }
 </style>
