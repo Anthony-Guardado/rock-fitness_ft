@@ -2,28 +2,28 @@
   <aside class="w-52 min-w-[210px] h-full bg-[#111820] border-r border-cyan-500/15 flex flex-col pt-4">
     <nav class="flex flex-col gap-1 px-2 flex-1">
 
-      <router-link to="/admin" exact
+      <router-link to="/admin/AdminDashboard" exact
         class="nav-item"
         active-class="nav-item-active">
         <i class="pi pi-home text-base" />
         <span>Inicio</span>
       </router-link>
 
-      <router-link to="/admin/usuarios"
+      <router-link to="/admin/GestionUsuarios"
         class="nav-item"
         active-class="nav-item-active">
         <i class="pi pi-users text-base" />
         <span>Gestión de Usuarios</span>
       </router-link>
 
-      <router-link to="/admin/membresias"
+      <router-link to="/admin/GestionMembresias"
         class="nav-item"
         active-class="nav-item-active">
         <i class="pi pi-id-card text-base" />
         <span>Gestión de membresías</span>
       </router-link>
 
-      <router-link to="/admin/reportes"
+      <router-link to="/admin/Reportes"
         class="nav-item"
         active-class="nav-item-active">
         <i class="pi pi-file text-base" />

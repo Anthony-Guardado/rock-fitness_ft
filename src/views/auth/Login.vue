@@ -10,7 +10,8 @@
         <p class="text-gym-muted text-sm">Ingresa tus credenciales para continuar</p>
       </div>
 
-      <div v-if="errorMessage" class="mb-4 p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400 text-sm text-center">
+      <div v-if="errorMessage"
+        class="mb-4 p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400 text-sm text-center">
         <i class="pi pi-exclamation-circle mr-2"></i> {{ errorMessage }}
       </div>
 
@@ -20,14 +21,10 @@
           <label class="text-sm font-medium text-gym-text">Correo Electrónico</label>
           <div class="relative">
             <i class="pi pi-envelope absolute left-3 top-1/2 -translate-y-1/2 text-gym-muted"></i>
-            <input
-              v-model="form.email"
-              type="email"
-              placeholder="ejemplo@correo.com"
-              class="w-full bg-gym-input border border-gym-border text-gym-inputText placeholder-gym-muted rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-gym-accent focus:ring-1 focus:ring-gym-accent transition-all"
-              required
-              :disabled="loading"
-            />
+            <input v-model="form.email" type="email" placeholder="ejemplo@correo.com"
+              class="w-full bg-gym-input border border-gym-border text-gym-inputText placeholder-gym-muted
+              rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-gym-accent focus:ring-1 focus:ring-gym-accent transition-all"
+              required :disabled="loading" />
           </div>
         </div>
 
@@ -40,22 +37,16 @@
           </div>
           <div class="relative">
             <i class="pi pi-lock absolute left-3 top-1/2 -translate-y-1/2 text-gym-muted"></i>
-            <input
-              v-model="form.password"
-              type="password"
-              placeholder="••••••••"
-              class="w-full bg-gym-input border border-gym-border text-gym-inputText placeholder-gym-muted rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-gym-accent focus:ring-1 focus:ring-gym-accent transition-all"
-              required
-              :disabled="loading"
-            />
+            <input v-model="form.password" type="password" placeholder="••••••••"
+              class="w-full bg-gym-input border border-gym-border text-gym-inputText placeholder-gym-muted rounded-lg pl-10 pr-4
+              py-3 focus:outline-none focus:border-gym-accent focus:ring-1 focus:ring-gym-accent transition-all"
+              required :disabled="loading" />
           </div>
         </div>
 
-        <button
-          type="submit"
-          :disabled="loading"
-          class="w-full bg-gym-accent hover:bg-[#3ab0e5] text-gym-base font-poppins font-bold text-lg py-3 rounded-lg transition-colors mt-2 flex justify-center items-center disabled:opacity-70 disabled:cursor-not-allowed"
-        >
+        <button type="submit" :disabled="loading"
+          class="w-full bg-gym-accent hover:bg-[#3ab0e5] text-gym-base font-poppins font-bold text-lg py-3 rounded-lg transition-colors
+          mt-2 flex justify-center items-center disabled:opacity-70 disabled:cursor-not-allowed">
           <span v-if="!loading">Iniciar Sesión</span>
           <span v-else>
             <i class="pi pi-spin pi-spinner mr-2"></i> Ingresando...
