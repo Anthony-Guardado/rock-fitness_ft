@@ -1,86 +1,75 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-// Home
-import HomeView from '../views/home/HomeView.vue'
-import AboutView from '../views/home/AboutView.vue'
+// 1. IMPORTAMOS LAS VISTAS
+import HomeView from '@/views/home/HomeView.vue'
+import Login from '@/views/auth/Login.vue'
+import RecuperarContrasena from '@/views/auth/RecuperarContrasena.vue'
+    import RestablecerContrasena from '@/views/auth/RestablecerContrasena.vue'
 
-// Auth
-import Login from '../views/auth/Login.vue'
-import Register from '../views/auth/Register.vue'
-
-// Admin
-import AdminDashboard from '../views/admin/AdminDashboard.vue'
-import GestionUsuarios from '../views/admin/GestionUsuarios.vue'
-import GestionPagos from '../views/admin/GestionPagos.vue'
-import GestionMembresias from '../views/admin/GestionMembresias.vue'
-import Reportes from '../views/admin/Reportes.vue'
-
-// User
-import UserDashboard from '../views/user/UserDashboard.vue'
-import Membresia from '../views/user/Membresia.vue'
-import HistorialPagos from '../views/user/HistorialPagos.vue'
-
-const routes = [
-  // Home
-  {
-    path: '/',
-    component: HomeView
-  },
-  {
-    path: '/about',
-    component: AboutView
-  },
-
-  // Auth
-  {
-    path: '/login',
-    component: Login
-  },
-  {
-    path: '/register',
-    component: Register
-  },
-
-  // Admin
-  {
-    path: '/admin',
-    component: AdminDashboard
-  },
-  {
-    path: '/admin/usuarios',
-    component: GestionUsuarios
-  },
-  {
-    path: '/admin/pagos',
-    component: GestionPagos
-  },
-  {
-    path: '/admin/membresias',
-    component: GestionMembresias
-  },
-  {
-    path: '/admin/reportes',
-    component: Reportes
-  },
-
-  // User
-  {
-    path: '/dashboard',
-    component: UserDashboard
-  },
-  {
-    path: '/dashboard/membresia',
-    component: Membresia
-  },
-  {
-    path: '/dashboard/pagos',
-    component: HistorialPagos
-  }
-]
+// import Register from '@/views/auth/Register.vue' // Lo descomentamos cuando lo creemos
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    // RUTA DEL HOME (La portada principal)
+    {
+      path: '/',
+      name: 'home',
+      component: HomeView
+    },
+
+    // RUTA DEL LOGIN
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+
+    // RUTA DE RECUPERAR CONTRASEÑA
+    {
+      path: '/recuperar-contrasena',
+      name: 'recuperar-contrasena',
+      component: RecuperarContrasena
+    },
+
+
+// Restablecer contraseña
+    {
+      path: '/restablecer-contrasena',
+      name: 'restablecer-contrasena',
+      component: RestablecerContrasena
+    },
+//Suscripciones Nabvar
+{
+      path: '/suscripciones',
+      name: 'suscripciones',
+      // Aquí es donde Vue enlaza la URL con tu archivo físico
+      component: () => import('@/views/home/Suscripciones.vue')
+    }
+
+    // RUTA DEL REGISTRO (Preparada para el futuro)
+    /*
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
+    },
+    */
+
+    // RUTAS DE LOS DASHBOARDS (Preparadas para cuando las creemos)
+    /*
+    {
+      path: '/user/dashboard',
+      name: 'user-dashboard',
+      component: () => import('@/views/dashboard/UserDashboard.vue')
+    },
+    {
+      path: '/admin/dashboard',
+      name: 'admin-dashboard',
+      component: () => import('@/views/dashboard/AdminDashboard.vue')
+    }
+    */
+  ]
 })
 
 export default router
