@@ -51,15 +51,7 @@ const router = createRouter({
       // Aquí es donde Vue enlaza la URL con tu archivo físico
       component: () => import('@/views/home/Suscripciones.vue')
     },
-      {
-      path:'/admin',
-      component: () => import('@/components/layouts/AdminLayout.vue'),
-      },
-      {
-        path:'/gestion-usuarios',
-        name:'gestion-usuarios',
-        component: GestionUsuarios
-      },
+     
       
 
      

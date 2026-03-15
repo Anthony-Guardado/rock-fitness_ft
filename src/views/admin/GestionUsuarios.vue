@@ -91,7 +91,9 @@ const openEdit   = (user) => { selectedUser.value = user; showEdit.value = true 
 const openDelete = (user) => { selectedUser.value = user; showDelete.value = true }
 </script>
 
+
 <style>
+/* 1. Tus estilos originales (MANTENER) */
 .rock-table .p-datatable-thead > tr > th {
   background: #0d1520 !important;
   color: #4fc3f7 !important;
@@ -101,6 +103,7 @@ const openDelete = (user) => { selectedUser.value = user; showDelete.value = tru
   text-transform: uppercase;
   border-bottom: 1px solid rgba(79,195,247,0.2) !important;
 }
+
 .rock-table .p-datatable-tbody > tr {
   background: #111820 !important;
 }
@@ -108,9 +111,44 @@ const openDelete = (user) => { selectedUser.value = user; showDelete.value = tru
 .rock-table .p-datatable-tbody > tr.p-row-odd {
   background: #0f161e !important;
 }
+
 .rock-table {
   border: 1px solid rgba(79,195,247,0.2);
   border-radius: 12px;
   overflow: hidden;
 }
+
+/* 2. LO NUEVO: Esto elimina el fogonazo blanco del hover */
+.rock-table .p-datatable-tbody > tr:hover {
+  /* Aquí puedes poner un color apenas más claro para que se note dónde estás, 
+     pero sin que brille blanco. Por ejemplo un azul muy oscuro: */
+  background: #1a2533 !important; 
+  color: inherit !important;
+}
+
+/* Esto asegura que las letras no cambien a colores raros al pasar el mouse */
+.rock-table .p-datatable-tbody > tr:hover td {
+  color: #ffffff import
+}
+.rock-table .p-datatable-tbody > tr > td {
+  padding: 1rem 0.5rem !important;
+}
+/* ELIMINADOR DEFINITIVO DE HOVER BLANCO */
+
+/* 1. Forzamos el fondo de la fila y de cada celda individual */
+.rock-table.p-datatable .p-datatable-tbody > tr:hover,
+.rock-table.p-datatable .p-datatable-tbody > tr:hover > td {
+  background: #16202c !important; /* Un azul muy oscuro, casi negro */
+}
+
+/* 2. Evitamos que el texto de las celdas se aclare */
+.rock-table.p-datatable .p-datatable-tbody > tr:hover td {
+  color: #ffffff !important;
+}
+
+/* 3. Evitamos que los botones cambien su estilo al hacer hover en la fila */
+.rock-table.p-datatable .p-datatable-tbody > tr:hover .p-button.p-button-outlined {
+  background: transparent !important;
+}
+
 </style>
