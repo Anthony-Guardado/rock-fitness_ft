@@ -5,9 +5,17 @@ import HomeView from '@/views/home/HomeView.vue'
 import Login from '@/views/auth/Login.vue'
 import RecuperarContrasena from '@/views/auth/RecuperarContrasena.vue'
     import RestablecerContrasena from '@/views/auth/RestablecerContrasena.vue'
+<<<<<<< HEAD
 import UserLayout from '@/components/layouts/UserLayout.vue'
 import UserDashboard from '@/views/user/UserDashboard.vue'
 import HistorialPagos from '@/views/user/HistorialPagos.vue'
+
+=======
+import GestionUsuarios from '@/views/admin/GestionUsuarios.vue'
+import GestionMembresias from '@/views/admin/GestionMembresias.vue'
+import Reportes from '@/views/admin/Reportes.vue'
+>>>>>>> origin/rama_osito
+
 
 
 // import Register from '@/views/auth/Register.vue' // Lo descomentamos cuando lo creemos
@@ -65,7 +73,7 @@ const router = createRouter({
     {
       path:"/admin/dashboard",
       component: () => import("@/components/layouts/AdminLayout.vue"),
-      
+
     }
 
   ]
