@@ -4,7 +4,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/home/HomeView.vue'
 import Login from '@/views/auth/Login.vue'
 import RecuperarContrasena from '@/views/auth/RecuperarContrasena.vue'
-    import RestablecerContrasena from '@/views/auth/RestablecerContrasena.vue'
+import RestablecerContrasena from '@/views/auth/RestablecerContrasena.vue'
+import UserLayout from '@/components/layouts/UserLayout.vue'
+import UserDashboard from '@/views/user/UserDashboard.vue'
+import HistorialPagos from '@/views/user/HistorialPagos.vue'
+import AdminLayout from '@/components/layouts/AdminLayout.vue'
+
+
+
 
 // import Register from '@/views/auth/Register.vue' // Lo descomentamos cuando lo creemos
 
@@ -45,30 +52,54 @@ const router = createRouter({
       name: 'suscripciones',
       // Aquí es donde Vue enlaza la URL con tu archivo físico
       component: () => import('@/views/home/Suscripciones.vue')
+    },
+
+    //Rutas de interfaces de cliente y admin
+
+      //cliente
+    {
+    path: '/dashboard',
+    component: UserLayout,
+    children: [
+      { path: '', component: UserDashboard },
+      { path: 'pagos', component: HistorialPagos },
+    ]
+    },
+      //admin
+    {
+      path:"/admin",
+      component: AdminLayout,
+      meta: { requiresAuth: true, role: ["ADMIN"]},
+
+      children: [
+        {
+          path: 'AdminDashboard',
+          name: "admin-Dashboard",
+          component: () => import("@/views/admin/AdminDashboard.vue"),
+        },
+        {
+          path: "GestionMembresias",
+          name: "GestionMembresiass",
+          component: () => import("@/views/admin/GestionMembresias.vue"),
+        },
+        {
+          path: "GestionPagos",
+          name: "admin-pagos",
+          component: () => import("@/views/admin/GestionPagos.vue"),
+        },
+        {
+          path: 'GestionUsuarios',
+          name: "admin-usuarios",
+          component: () => import("@/views/admin/GestionUsuarios.vue"),
+        },
+        {
+          path: 'Reportes',
+          name: "admin-reportes",
+          component: () => import("@/views/admin/Reportes.vue"),
+        }
+      ]
     }
 
-    // RUTA DEL REGISTRO (Preparada para el futuro)
-    /*
-    {
-      path: '/register',
-      name: 'register',
-      component: Register
-    },
-    */
-
-    // RUTAS DE LOS DASHBOARDS (Preparadas para cuando las creemos)
-    /*
-    {
-      path: '/user/dashboard',
-      name: 'user-dashboard',
-      component: () => import('@/views/dashboard/UserDashboard.vue')
-    },
-    {
-      path: '/admin/dashboard',
-      name: 'admin-dashboard',
-      component: () => import('@/views/dashboard/AdminDashboard.vue')
-    }
-    */
   ]
 })
 
