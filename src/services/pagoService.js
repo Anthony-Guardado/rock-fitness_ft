@@ -2,12 +2,20 @@ import api from './api'
 
 export default {
 
-  getMisPagos() {
-    return api.get('/pagos/mispagos')
-  },
+    getMisPagos() {
+        return api.get('/pagos/mispagos')
+    },
 
+    getAll() {
+        return api.get('/pagos')
+    },
 
-  getAll() {
-    return api.get('/pagos')
-  }
+    crearPago(datos) {
+        return api.post('/pagos/crear', datos)
+    },
+
+    crearIntent(datos) {
+        return api.post('/payment/crear-intent', datos)
+    }
+
 }
