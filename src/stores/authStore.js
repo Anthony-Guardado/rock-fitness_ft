@@ -29,16 +29,16 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(credentials) {
       try {
-        const { data } = await api.post('/login', credentials)
+        const { data } = await api.post('/auth/login', credentials)
 
         this.token = data.access_token
         this.user = data.user
 
         // Redirección estricta para nuestros 2 roles
         if (this.isAdmin) {
-          router.push('/admin/dashboard')
+          router.push('/admin/AdminDashboard')
         } else {
-          router.push('/user/dashboard')
+          router.push('/dashboard')
         }
       } catch (error) {
         console.error("Error en login", error)
@@ -48,12 +48,12 @@ export const useAuthStore = defineStore('auth', {
 
     async register(payload) {
       try {
-        const { data } = await api.post('/register', payload)
+        const { data } = await api.post('/auth/register', payload)
 
         this.token = data.access_token
         this.user = data.user
 
-        router.push('/user/dashboard')
+        router.push('/dashboard')
       } catch (error) {
          console.error("Error al registrarse", error)
          throw error
