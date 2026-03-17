@@ -1,8 +1,14 @@
 <template>
   <!-- Overlay oscuro -->
-  <div class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center">
+  <div class="fixed inset-0 bg-[#181A1F] z-50 flex items-center justify-center">
 
     <div class="flex flex-col items-center gap-8 p-8">
+
+       <button
+        class="absolute top-0 right-0 text-[#B4B4BC] hover:text-[#F5F5F5] transition-colors"
+        @click="$emit('cerrar')">
+        <i class="pi pi-times text-xl"></i>
+      </button>
 
       <!-- Título -->
       <h2 class="text-[#F5F5F5] text-2xl font-bold tracking-wide">
@@ -86,4 +92,5 @@ const elegir = (plan) => {
   // Después aquí se emite el plan elegido y se abre el modal de pago
   console.log('Plan elegido:', plan)
 }
+
 </script>
