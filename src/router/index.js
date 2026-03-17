@@ -9,6 +9,7 @@ import UserLayout from '@/components/layouts/UserLayout.vue'
 import UserDashboard from '@/views/user/UserDashboard.vue'
 import HistorialPagos from '@/views/user/HistorialPagos.vue'
 import AdminLayout from '@/components/layouts/AdminLayout.vue'
+import Register from '@/views/auth/Register.vue'
 
 
 
@@ -53,8 +54,12 @@ const router = createRouter({
       // Aquí es donde Vue enlaza la URL con tu archivo físico
       component: () => import('@/views/home/Suscripciones.vue')
     },
-
-    //Rutas de interfaces de cliente y admin
+//Ruta de registro
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
+    },
 
       //cliente
     {
