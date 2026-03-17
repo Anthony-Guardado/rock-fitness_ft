@@ -65,6 +65,7 @@ const router = createRouter({
     {
     path: '/dashboard',
     component: UserLayout,
+    meta : { requiresAuth: true, role: ["CLIENTE"]},
     children: [
       { path: '', component: UserDashboard },
       { path: 'pagos', component: HistorialPagos },

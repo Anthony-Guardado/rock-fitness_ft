@@ -21,6 +21,13 @@
         active-class="nav-item-active">
         <i class="pi pi-id-card text-base" />
         <span>Gestión de membresías</span>
+      </router-link>\
+
+      <router-link to="/admin/GestionMembresias"
+        class="nav-item"
+        active-class="nav-item-active">
+        <i class="pi pi-id-card text-base" />
+        <span>Historial de pagos</span>
       </router-link>
 
       <router-link to="/admin/Reportes"

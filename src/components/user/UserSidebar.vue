@@ -16,7 +16,7 @@
   >
     <!-- Logo -->
     <div class="flex items-center gap-3 px-5 h-16 border-b border-[#23374D]">
-      
+
       <span class="text-[#F5F5F5] font-bold text-sm tracking-widest">ROCK FITNESS</span>
     </div>
 
@@ -47,7 +47,8 @@
 
     <!-- Salir -->
     <div class="p-4 border-t border-[#23374D]">
-      <button class="nav-link w-full text-red-400 hover:bg-red-500/10">
+      <button class="nav-link w-full text-red-400 hover:bg-red-500/10"
+      @click="authStore.logout()">
         <i class="pi pi-sign-out text-base"></i>
         <span>Salir</span>
       </button>
@@ -56,6 +57,10 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/authStore'
+
+const authStore = useAuthStore()
+
 defineProps({
   open: Boolean,
   isMobile: Boolean

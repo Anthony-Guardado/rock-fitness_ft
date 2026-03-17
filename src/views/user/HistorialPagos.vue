@@ -6,5 +6,5 @@
 </template>
 
 <script setup>
-import PagoTablas from '@/components/user/pagoTablas.vue'
+import PagoTablas from '@/components/user/PagoTablas.vue'
 </script>
