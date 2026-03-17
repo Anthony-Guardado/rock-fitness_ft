@@ -50,6 +50,4 @@
   </nav>
 </template>
 
-<script setup>
-// No necesitamos nada aquí, los router-link hacen toda la magia
-</script>
+

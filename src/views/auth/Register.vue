@@ -35,92 +35,49 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label class="block text-sm font-medium text-gym-muted mb-1">Nombre</label>
-              <input
-                v-model="form.nombre"
-                type="text"
-                required
-                class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm"
-                placeholder="Ej. Juan"
-              />
+              <input v-model="form.nombre" type="text" required class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm" placeholder="Ej. Ana" />
             </div>
-
             <div>
               <label class="block text-sm font-medium text-gym-muted mb-1">Apellido</label>
-              <input
-                v-model="form.apellido"
-                type="text"
-                required
-                class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm"
-                placeholder="Ej. Pérez"
-              />
+              <input v-model="form.apellido" type="text" required class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm" placeholder="Ej. Prendas" />
             </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label class="block text-sm font-medium text-gym-muted mb-1">Teléfono</label>
-              <input
-                v-model="form.telefono"
-                type="text"
-                required
-                class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm"
-                placeholder="0000-0000"
-              />
+              <input v-model="form.telefono" type="text" required class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm" placeholder="0000-0000" />
             </div>
-
             <div>
               <label class="block text-sm font-medium text-gym-muted mb-1">DUI</label>
-              <input
-                v-model="form.dui"
-                type="text"
-                required
-                class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm"
-                placeholder="00000000-0"
-              />
+              <input v-model="form.dui" type="text" required class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm" placeholder="00000000-0" />
             </div>
           </div>
 
-          <div>
-            <label class="block text-sm font-medium text-gym-muted mb-1">Correo electrónico</label>
-            <input
-              v-model="form.email"
-              type="email"
-              required
-              class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm"
-              placeholder="tu@correo.com"
-            />
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-sm font-medium text-gym-muted mb-1">Correo electrónico</label>
+              <input v-model="form.email" type="email" required class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm" placeholder="tu@correo.com" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gym-muted mb-1">Foto de Perfil</label>
+              <input type="file" @change="handleImage" accept="image/*" class="appearance-none block w-full px-4 py-2 border border-gym-border rounded-xl bg-[#1c1c21] text-gym-muted file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-gym-accent file:text-gym-base hover:file:bg-[#3ab0e5] focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm transition-all" />
+            </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label class="block text-sm font-medium text-gym-muted mb-1">Contraseña</label>
-              <input
-                v-model="form.password"
-                type="password"
-                required
-                class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm"
-                placeholder="••••••••"
-              />
+              <input v-model="form.password" type="password" required class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm" placeholder="••••••••" />
             </div>
-
             <div>
               <label class="block text-sm font-medium text-gym-muted mb-1">Confirmar Contraseña</label>
-              <input
-                v-model="form.password_confirmation"
-                type="password"
-                required
-                class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm"
-                placeholder="••••••••"
-              />
+              <input v-model="form.password_confirmation" type="password" required class="appearance-none block w-full px-4 py-3 border border-gym-border rounded-xl bg-[#1c1c21] text-white focus:outline-none focus:ring-1 focus:ring-gym-accent focus:border-gym-accent sm:text-sm" placeholder="••••••••" />
             </div>
           </div>
 
           <div class="pt-4">
-            <button
-              type="submit"
-              :disabled="loading"
-              class="w-full flex justify-center py-3.5 px-4 rounded-xl text-sm font-poppins font-bold text-gym-base bg-gym-accent hover:bg-[#3ab0e5] transition-all duration-300 disabled:opacity-50"
-            >
+            <button type="submit" :disabled="loading" class="w-full flex justify-center py-3.5 px-4 rounded-xl text-sm font-poppins font-bold text-gym-base bg-gym-accent hover:bg-[#3ab0e5] transition-all duration-300 disabled:opacity-50">
               <span v-if="loading"><i class="pi pi-spin pi-spinner mr-2"></i> Registrando...</span>
               <span v-else>Registrarse</span>
             </button>
@@ -134,18 +91,19 @@
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 
 const route = useRoute();
-const router = useRouter();
 const authStore = useAuthStore();
 
 const loading = ref(false);
 const errorMessage = ref(null);
 const planId = ref(null);
 
-// Objeto form adaptado exactamente a lo que pide tu AuthController
+// Variable para la imagen
+const imageFile = ref(null);
+
 const form = reactive({
   nombre: '',
   apellido: '',
@@ -162,20 +120,76 @@ onMounted(() => {
   }
 });
 
+// Función para atrapar la imagen del input
+const handleImage = (event) => {
+  imageFile.value = event.target.files[0];
+};
+
+//funcion principal cuando tocamos el boton de registrarse
 const sendRegister = async () => {
   loading.value = true;
   errorMessage.value = null;
 
+  // Expresiones regulares para validar los campos
+  const regexTexto = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,50}$/;
+  const regexDui = /^\d{8}-\d$/;
+  const regexTelefono = /^[267]\d{3}-?\d{4}$/;
+  const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // mensajes de validacion de las expresiones
+  if (!regexTexto.test(form.nombre)) {
+    errorMessage.value = "El nombre solo debe contener letras.";
+    loading.value = false; return;
+  }
+  if (!regexTexto.test(form.apellido)) {
+    errorMessage.value = "El apellido solo debe contener letras.";
+    loading.value = false; return;
+  }
+  if (!regexTelefono.test(form.telefono)) {
+    errorMessage.value = "Teléfono inválido. Ingrese 8 dígitos (ej: 7000-0000).";
+    loading.value = false; return;
+  }
+  if (!regexDui.test(form.dui)) {
+    errorMessage.value = "DUI inválido. Formato requerido: 12345678-9.";
+    loading.value = false; return;
+  }
+  if (!regexEmail.test(form.email)) {
+    errorMessage.value = "Por favor, ingresa un correo válido.";
+    loading.value = false; return;
+  }
+  if (form.password.length < 8) {
+    errorMessage.value = "La contraseña debe tener al menos 8 caracteres.";
+    loading.value = false; return;
+  }
+  if (form.password !== form.password_confirmation) {
+    errorMessage.value = "Las contraseñas no coinciden, verifique.";
+    loading.value = false; return;
+  }
+
   try {
-    if (form.password !== form.password_confirmation) {
-      errorMessage.value = "Las contraseñas no coinciden, verifique.";
-      loading.value = false;
-      return;
+    // Los datos no van en JSON no puede transportar archivos físicos
+    const formData = new FormData();
+    formData.append('nombre', form.nombre);
+    formData.append('apellido', form.apellido);
+    formData.append('telefono', form.telefono);
+    formData.append('dui', form.dui);
+    formData.append('email', form.email);
+    formData.append('password', form.password);
+    formData.append('password_confirmation', form.password_confirmation);
+
+    // en esta variable seguardo el plan que selecciono el cliente
+    if (planId.value) {
+      formData.append('membresia_id', planId.value);
     }
 
-    // Enviamos el form al store
-    await authStore.register(form);
+    // si se mando la ft se agrega al formData
+    if (imageFile.value) {
+      formData.append('imagenes[]', imageFile.value);
+    }
 
+    //Enviamos el FormData al store para que pueda iniciar de una vez en la pestaña principal
+    await authStore.register(formData);
+    /* Atrapa los errores para mostrar el mensaje */
   } catch (err) {
     if (err.response?.status === 422) {
       console.log(err.response.data);

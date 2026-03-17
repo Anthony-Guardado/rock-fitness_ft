@@ -15,12 +15,12 @@ export const useAuthStore = defineStore('auth', {
   getters: {
     isAuthenticated: (state) => !!state.token,
 
-    // Verificamos si es ADMIN
+    // Verifica los roles
     isAdmin: (state) => {
       return state.user?.roles?.some(role => role.name === 'ADMIN')
     },
 
-    // Verificamos si es CLIENTE
+
     isCliente: (state) => {
       return state.user?.roles?.some(role => role.name === 'CLIENTE')
     }
@@ -34,7 +34,7 @@ export const useAuthStore = defineStore('auth', {
         this.token = data.access_token
         this.user = data.user
 
-        // Redirección estricta para nuestros 2 roles
+        // Redirecciona segun el rol
         if (this.isAdmin) {
           router.push('/admin/AdminDashboard')
         } else {
@@ -42,7 +42,7 @@ export const useAuthStore = defineStore('auth', {
         }
       } catch (error) {
         console.error("Error en login", error)
-        throw error // Lanza el error para que Login.vue atrape el 401
+        throw error
       }
     },
 

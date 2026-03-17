@@ -21,7 +21,7 @@
           <label class="text-sm font-medium text-gym-text">Correo Electrónico</label>
           <div class="relative">
             <i class="pi pi-envelope absolute left-3 top-1/2 -translate-y-1/2 text-gym-muted"></i>
-            <input v-model="form.email" type="email" placeholder="ejemplo@correo.com"
+            <input v-model="form.email" type="email" placeholder="ana.prendas@gmail.com"
               class="w-full bg-gym-input border border-gym-border text-gym-inputText placeholder-gym-muted
               rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-gym-accent focus:ring-1 focus:ring-gym-accent transition-all"
               required :disabled="loading" />
