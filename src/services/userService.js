@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAuthStore } from '@/stores/authStore'; // ajusta la ruta
+import { useAuthStore } from '@/stores/authStore'; 
 
 const API_URL = 'http://127.0.0.1:8000/api/user';
 
@@ -53,5 +53,28 @@ export const userService = {
             headers: { Authorization: `Bearer ${token}` }
         });
         return data;
-    }
-};
+    },
+
+//RUTAS 
+   
+
+  getPerfil(id) {
+    return api.get(`/user/${id}`)
+  },
+
+  store(formData) {
+    return api.post('/user', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  },
+
+  update(id, formData) {
+    return api.post(`/user/${id}?_method=PUT`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+  },
+
+    restore(id) {
+    return api.post(`/users/${id}/restore`)
+  }
+}

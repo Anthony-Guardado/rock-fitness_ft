@@ -1,18 +1,21 @@
 import axios from 'axios'
-import { useAuthStore } from '@/stores/authStore'
 
 const api = axios.create({
   baseURL: 'http://localhost:8000/api',
   headers: {
-    'Accept': 'application/json' // <--- Este pequeño salvavidas
+    'Accept': 'application/json'
   }
 })
 
 api.interceptors.request.use((config) => {
-  const authStore = useAuthStore()
+  // Leemos el localStorage que genera pinia-plugin-persistedstate
+  const authRaw = localStorage.getItem('auth')
 
-  if (authStore.token) {
-    config.headers.Authorization = `Bearer ${authStore.token}`
+  if (authRaw) {
+    const authData = JSON.parse(authRaw)
+    if (authData.token) {
+      config.headers.Authorization = `Bearer ${authData.token}`
+    }
   }
 
   return config

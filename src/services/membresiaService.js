@@ -35,5 +35,29 @@ export const membresiaService = {
     return axios.patch(`${API_URL}/detalle_membresias/${usuario_id}/cambiar`, data, {
       headers: { Authorization: `Bearer ${token}` }
     });
-  }
-};
+  },
+//CONEXIONES PARA DATOS DEL USUARIO Y ACTUALIZACIÓN DE MEMBRESIA A DETALLE_MEMBRESIA
+    getMiMembresia() {
+        return api.get(`/detalle_membresias/miMembresia`)
+    },
+
+    getMembresias() {
+        return api.get('/membresias')
+    },
+
+    crearDetalle(datos) {
+        return api.post('/detalle_membresias', datos)
+    },
+
+    cambiarPlan(id, datos) {
+        return api.patch(`/detalle_membresias/${id}/cambiar`, datos)
+    },
+
+    cambiarEstado(id, datos) {
+        return api.patch(`/detalle_membresias/${id}/estado`, datos)
+    },
+
+    seleccionar(datos) {
+    return api.post('/detalle_membresias/seleccionar', datos)
+}
+}
