@@ -60,4 +60,6 @@ export const membresiaService = {
     seleccionar(datos) {
     return api.post('/detalle_membresias/seleccionar', datos)
 }
+
 }
+export default membresiaService;

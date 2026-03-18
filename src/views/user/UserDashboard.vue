@@ -128,7 +128,7 @@ import { ref, onMounted } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useAuthStore } from '@/stores/authStore'
 import Tag from 'primevue/tag'
-import userService from '@/services/userService'
+import {userService} from '@/services/userService'
 import membresiaService from '@/services/membresiaService'
 import PlanesMembresia from '@/components/user/PlanesMembresia.vue'
 
