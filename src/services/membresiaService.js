@@ -1,4 +1,5 @@
 import axios from 'axios';
+import api from '@/services/api';
 import { useAuthStore } from '@/stores/authStore';
 
 const API_URL = 'http://127.0.0.1:8000/api';
@@ -36,30 +37,26 @@ export const membresiaService = {
       headers: { Authorization: `Bearer ${token}` }
     });
   },
-//CONEXIONES PARA DATOS DEL USUARIO Y ACTUALIZACIÓN DE MEMBRESIA A DETALLE_MEMBRESIA
-    getMiMembresia() {
-        return api.get(`/detalle_membresias/miMembresia`)
-    },
 
-    getMembresias() {
-        return api.get('/membresias')
-    },
+  getMiMembresia() {
+    return api.get('/detalle_membresias/miMembresia');
+  },
 
-    crearDetalle(datos) {
-        return api.post('/detalle_membresias', datos)
-    },
+  getMembresias() {
+    return api.get('/membresias');
+  },
 
-    cambiarPlan(id, datos) {
-        return api.patch(`/detalle_membresias/${id}/cambiar`, datos)
-    },
+  crearDetalle(datos) {
+    return api.post('/detalle_membresias', datos);
+  },
 
-    cambiarEstado(id, datos) {
-        return api.patch(`/detalle_membresias/${id}/estado`, datos)
-    },
+  cambiarPlan(id, datos) {
+    return api.patch(`/detalle_membresias/${id}/cambiar`, datos);
+  },
 
-    seleccionar(datos) {
-    return api.post('/detalle_membresias/seleccionar', datos)
+  seleccionar(datos) {
+    return api.post('/detalle_membresias/seleccionar', datos);
+  }
 }
 
-}
 export default membresiaService;
