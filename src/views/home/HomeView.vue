@@ -1,4 +1,6 @@
 <template>
+  <!-- aca hay unos estilos globales que estan desde la configuracion de tailwind
+  ya que los colores de la empresa ya estan difinidos -->
   <div class="min-h-screen flex flex-col bg-gym-base text-gym-text font-inter">
 
     <NavbarHome />
@@ -13,12 +15,12 @@
 </template>
 
 <script setup>
-// 1. Importamos el Footer
+// Importacion del footer
 import Footer from '@/components/shared/Footer.vue'
 
-// 2. Importamos el HeroSection
+//Importacion de la pantalla principal
 import HeroSection from '@/components/home/HeroSection.vue'
 
-// 3. Importamos el Navbar
+//Importacion del navbar
 import NavbarHome from '@/components/home/NavbarHome.vue'
 </script>

@@ -102,7 +102,7 @@ const submitNewPassword = async () => {
   errorMessage.value = null
 
   try {
-    // IMPORTANTE: Esta ruta debe coincidir con routes/api.php en Laravel
+    
     const response = await api.post('/password/reset', form)
 
     successMessage.value = response.data.message || 'Tu contraseña ha sido restablecida.'

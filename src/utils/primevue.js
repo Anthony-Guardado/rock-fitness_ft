@@ -18,7 +18,8 @@ import Textarea from 'primevue/textarea';
 import InputNumber from 'primevue/inputnumber';
 import Dropdown from 'primevue/dropdown';
 import FileUpload from 'primevue/fileupload';
-
+import Swal from 'sweetalert2';
+import Calendar from 'primevue/calendar';
 
 export default function setupPrimeVue(app){
 
@@ -42,7 +43,9 @@ export default function setupPrimeVue(app){
     app.component('InputNumber', InputNumber)
     app.component('Dropdown', Dropdown)
     app.component('FileUpload', FileUpload)
+    app.component('Swal', Swal)
+    app.component('Calendar', Calendar)
+
 
 }
 
- 

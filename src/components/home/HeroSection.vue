@@ -1,5 +1,5 @@
 <template>
-  <section class="relative w-full min-h-[85vh] flex items-center justify-center font-inter overflow-hidden">
+  <div class="relative w-full min-h-[85vh] flex items-center justify-center font-inter overflow-hidden">
 
     <img
       src="@/assets/logo1.jpeg"
@@ -32,17 +32,14 @@
 
       <div class="md:col-span-5 flex justify-center items-center py-10 md:py-0">
         <img
-          :src="logoRockFitness"
+          src="@/assets/logo2.jpeg"
           alt="Rock Fitness Logo Oficial"
           class="w-full max-w-[320px] md:max-w-[420px] h-auto object-contain drop-shadow-glow"
         />
       </div>
 
     </div>
-  </section>
+  </div>
 </template>
 
-<script setup>
-// 2. IMPORTACIÓN DEL LOGO (Usando el nombre exacto de tu captura)
-import logoRockFitness from '@/assets/logo2.jpeg'
-</script>
+
