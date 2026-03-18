@@ -21,8 +21,8 @@
         </router-link>
 
         <router-link to="/admin/GestionPagos" class="nav-item" active-class="nav-item-active">
-          <i class="pi pi-money-bill text-base" />
-          <span>Gestión Pagos</span>
+        <i class="pi pi-money-bill" />
+        <span>Gestión Pagos</span>
         </router-link>
 
         <router-link to="/admin/Reportes" class="nav-item" active-class="nav-item-active">

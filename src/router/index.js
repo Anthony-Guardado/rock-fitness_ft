@@ -49,16 +49,36 @@ const router = createRouter({
   ]
 })
 
-// GUARDÍAN DE NAVEGACIÓN (Añádelo para que no te deje entrar sin loguear)
+// GUARDÍAN DE NAVEGACIÓN BLINDADO (Vue Router 4)
 router.beforeEach((to) => {
   const auth = useAuthStore()
-  if (to.meta.requiresAuth && !auth.isAuthenticated) return '/login'
-  if (to.meta.guest && auth.isAuthenticated) return '/'
 
-  if (to.meta.role) {
-    const hasRole = auth.user?.roles?.some(r => r.name === to.meta.role)
-    if (!hasRole) return '/'
+  // 1. Escaneamos si la ruta a la que va (O CUALQUIERA DE SUS PADRES) requiere auth
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+
+  // 2. Escaneamos si la ruta a la que va (O CUALQUIERA DE SUS PADRES) exige un rol
+  const requiredRole = to.matched.find(record => record.meta.role)?.meta.role
+
+  // REGLA A: Si requiere login y no está autenticado -> Al login
+  if (requiresAuth && !auth.isAuthenticated) {
+    return '/login'
+  }
+
+  // REGLA B: Si ya está logueado y quiere ir al login/registro -> Al inicio
+  if (to.meta.guest && auth.isAuthenticated) {
+    return '/'
+  }
+
+  // REGLA C: Validación estricta de Roles (Protege Admin y Cliente)
+  if (requiredRole && auth.isAuthenticated) {
+    // Verificamos si el usuario tiene el rol que pide la ruta
+    const hasRole = auth.user?.roles?.some(r => r.name.toUpperCase() === requiredRole.toUpperCase())
+
+    if (!hasRole) {
+      console.warn(`Acceso denegado: Necesitas ser ${requiredRole}`)
+      // Redirección inteligente: si es Admin lo mandamos a su panel, si no, al home
+      return auth.isAdmin ? '/admin/AdminDashboard' : '/'
+    }
   }
 })
-
 export default router
