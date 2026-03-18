@@ -21,7 +21,7 @@
           <label class="text-sm font-medium text-gym-text">Correo Electrónico</label>
           <div class="relative">
             <i class="pi pi-envelope absolute left-3 top-1/2 -translate-y-1/2 text-gym-muted"></i>
-            <input v-model="form.email" type="email" placeholder="ejemplo@correo.com"
+            <input v-model="form.email" type="email" placeholder="ana.prendas@gmail.com"
               class="w-full bg-gym-input border border-gym-border text-gym-inputText placeholder-gym-muted
               rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-gym-accent focus:ring-1 focus:ring-gym-accent transition-all"
               required :disabled="loading" />
@@ -68,12 +68,14 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 
-// Inicializamos el store
+// Inicializamos herramientas
 const authStore = useAuthStore()
+const router = useRouter()
 
-// Variables de estado local para la vista
+// Variables de estado local
 const loading = ref(false)
 const errorMessage = ref(null)
 
@@ -83,20 +85,32 @@ const form = reactive({
   password: ''
 })
 
-// Función principal que se dispara al hacer submit
+// Función principal de acceso
 const handleLogin = async () => {
   loading.value = true
   errorMessage.value = null
 
   try {
-    // Toda la magia de peticiones y redirección ocurre dentro del store
+    // 1. Intentamos el login a través del store
     await authStore.login(form)
-  } catch (err) {
-    // Solo nos preocupamos por mostrar el error si falla
-    if (err.response?.status === 401) {
-      errorMessage.value = err.response.data.message || 'Credenciales inválidas.'
+
+    // 2. Redirección por PATH DIRECTO (más seguro para tu configuración)
+    if (authStore.isAdmin) {
+      // Coincide con el path: '/admin/AdminDashboard' de tu index.js
+      router.push('/admin/AdminDashboard')
     } else {
-      errorMessage.value = 'Error al iniciar sesión. Intenta más tarde.'
+      // Coincide con el path: '/dashboard' del cliente
+      router.push('/dashboard')
+    }
+
+  } catch (err) {
+    // 3. Manejo de errores amigable
+    if (err.response?.status === 401) {
+      errorMessage.value = 'Correo o contraseña incorrectos.'
+    } else if (err.response?.status === 422) {
+      errorMessage.value = 'Por favor, revisa que el formato del correo sea válido.'
+    } else {
+      errorMessage.value = 'No se pudo conectar con el servidor. Intenta de nuevo.'
     }
   } finally {
     loading.value = false

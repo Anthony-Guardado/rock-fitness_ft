@@ -1,176 +1,130 @@
 <template>
-  <div class="flex flex-col gap-6">
-    <h2 class="text-xl font-bold text-blue tracking-wide">Reporte de Pagos</h2>
+<div class="w-full max-w-4xl mx-auto bg-gym-card rounded-2xl shadow-2xl p-8 border border-gym-border font-inter flex flex-col items-center">
+      <h2 class="text-3xl font-poppins font-extrabold text-white mb-6 border-b border-gym-border pb-4">
+        Reporte de <span class="text-gym-accent">Pagos</span>
+      </h2>
 
-    <!-- Filtros -->
-    <div class="flex items-end gap-6 flex-wrap">
-      <div class="flex flex-col gap-1">
-        <label class="text-xs text-blue font-medium tracking-wide">Fecha Inicio</label>
-        <Calendar
-          v-model="fechaInicio"
-          placeholder="Seleccione una fecha"
-          dateFormat="yy-mm-dd"
-          class="rock-calendar"
-          showIcon />
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div>
+          <label class="block text-sm font-medium text-gym-muted mb-2">Fecha Inicio</label>
+          <Calendar
+            v-model="fechaInicio"
+            dateFormat="yy-mm-dd"
+            showIcon
+            class="w-full p-fluid"
+            inputClass="bg-[#1c1c21] text-white border-gym-border focus:ring-gym-accent"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gym-muted mb-2">Fecha Final</label>
+          <Calendar
+            v-model="fechaFin"
+            dateFormat="yy-mm-dd"
+            showIcon
+            class="w-full p-fluid"
+            inputClass="bg-[#1c1c21] text-white border-gym-border focus:ring-gym-accent"
+          />
+        </div>
+
+        <div class="md:col-span-2 lg:col-span-1">
+          <label class="block text-sm font-medium text-gym-muted mb-2">Estado del Pago</label>
+          <div class="w-full bg-[#1c1c21] text-gym-accent border border-gym-border rounded-lg px-4 py-2 flex items-center h-[42px] opacity-80 cursor-not-allowed">
+            <span class="font-semibold tracking-wide ">Pagado</span>
+          </div>
+        </div>
       </div>
 
-      <div class="flex flex-col gap-1">
-        <label class="text-xs text-blue font-medium tracking-wide">Fecha Fin</label>
-        <Calendar
-          v-model="fechaFin"
-          placeholder="Seleccione una fecha"
-          dateFormat="yy-mm-dd"
-          class="rock-calendar"
-          showIcon />
+      <div class="mt-8 flex flex-col md:flex-row justify-end gap-4 border-t border-gym-border pt-6">
+
+        <Button
+          label="Limpiar Filtros"
+          icon="pi pi-filter-slash"
+          class="p-button-outlined w-full md:w-auto text-gym-muted border-gym-border hover:text-white hover:border-white transition-colors"
+          @click="limpiarFiltros"
+        />
+
+        <Button
+          label="Generar Reporte PDF"
+          icon="pi pi-file-pdf"
+          :loading="loading"
+          class="w-full md:w-auto bg-gym-accent text-gym-base font-bold border-none hover:bg-[#3ab0e5] transition-colors px-6 py-2 rounded-xl"
+          @click="generarReporte"
+        />
       </div>
-
-      <Button
-        icon="pi pi-search"
-        label="Reportes de Pagos"
-        class="!bg-cyan-500 !border-cyan-500 !font-semibold"
-        @click="buscarReportes" />
     </div>
 
-    <!-- Tabla -->
-    <DataTable
-      :value="reportesFiltrados"
-      class="rock-table"
-      :rows="10"
-      stripedRows>
-
-      <Column field="nombre"   header="Nombre" />
-      <Column field="tipo"     header="Tipo de membresía" />
-      <Column field="monto"    header="Monto">
-        <template #body="{ data }">
-          <span>{{ data.monto }}</span>
-        </template>
-      </Column>
-      <Column field="fecha"    header="Fecha de registro" />
-      <Column header="Acción">
-        <template #body="{ data }">
-          <Button
-            label="Ver"
-            size="small"
-            severity="info"
-            outlined
-            @click="openReporte(data)" />
-        </template>
-      </Column>
-    </DataTable>
-
-    <!-- Botones inferiores -->
-    <div class="flex items-center gap-4 justify-center mt-2">
-      <Button
-        icon="pi pi-file-pdf"
-        label="Exportar a PDF"
-        severity="secondary"
-        outlined
-        class="!px-8"
-        @click="exportarPDF" />
-      <Button
-        icon="pi pi-refresh"
-        label="Limpiar"
-        severity="secondary"
-        outlined
-        class="!px-8"
-        @click="limpiarFiltros" />
-    </div>
-
-    <!-- Modal -->
-    <ReportesPagosDialog
-      :visible="showReporte"
-      :reporte="selectedReporte"
-      @close="showReporte = false" />
-  </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import DataTable from 'primevue/datatable'
-import Column    from 'primevue/column'
-import Button    from 'primevue/button'
-import Calendar  from 'primevue/calendar'
+import { ref } from "vue";
+import Swal from "sweetalert2";
+import api from "@/services/api";
 
-import navbar from '@/components/layouts/AdminLayout.vue'
-import ReportesPagosDialog from '@/components/admin/Reportes/ReportesPagosDialog.vue'
+const fechaInicio = ref(null);
+const fechaFin = ref(null);
+const loading = ref(false);
 
+//funcion para formatear la fecha que se enviará al backend
+const formatearFecha = (fecha) => {
+  if (!fecha) return "";
+  const d = new Date(fecha);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 
-const fechaInicio     = ref(null)
-const fechaFin        = ref(null)
-const showReporte     = ref(false)
-const selectedReporte = ref(null)
+//funcion para generar el reporte
+const generarReporte = async () => {
+  if (!fechaInicio.value || !fechaFin.value) {
+    Swal.fire({
+      icon: "error",
+      title: "Faltan datos",
+      text: "Debe seleccionar el rango de fechas para el reporte.",
+      background: '#1c1c21',
+      color: '#ffffff'
+    });
+    return;
+  }
 
-const reportes = ref([
-  { id: 1, nombre: 'Carlos López',    tipo: 'Premium', monto: '$850.00 / mes', fecha: '2025-04-20' },
-  { id: 2, nombre: 'Ana Martínez',    tipo: 'Básica',  monto: '$500.00 / mes', fecha: '2025-04-18' },
-  { id: 3, nombre: 'Luis García',     tipo: 'VIP',     monto: '$1,200.00 / mes',fecha: '2025-04-15' },
-  { id: 4, nombre: 'María Fernández', tipo: 'Premium', monto: '$850.00 / mes', fecha: '2025-04-12' },
-  { id: 5, nombre: 'Jorge Ramírez',   tipo: 'Básica',  monto: '$500.00 / mes', fecha: '2025-04-10' },
-])
+  const f1 = formatearFecha(fechaInicio.value);
+  const f2 = formatearFecha(fechaFin.value);
 
-const reportesFiltrados = computed(() => {
-  if (!fechaInicio.value && !fechaFin.value) return reportes.value
-  return reportes.value.filter(r => {
-    const fecha = new Date(r.fecha)
-    const desde = fechaInicio.value ? new Date(fechaInicio.value) : null
-    const hasta = fechaFin.value    ? new Date(fechaFin.value)    : null
-    if (desde && fecha < desde) return false
-    if (hasta && fecha > hasta) return false
-    return true
-  })
-})
+  //Esto esta por que nuestros reportes solo son de estado pagado
+  const estadoFijo = "pagado";
 
-const openReporte  = (r) => { selectedReporte.value = r; showReporte.value = true }
-const limpiarFiltros = () => { fechaInicio.value = null; fechaFin.value = null }
-const buscarReportes = () => { /* el computed ya filtra reactivamente */ }
-const exportarPDF    = () => { console.log('Exportar a PDF') }
+  loading.value = true;
+
+  try {
+    const response = await api.get(`/reportes/pagos?fecha_inicio=${f1}&fecha_fin=${f2}&estado=${estadoFijo}`, {
+      responseType: 'blob'
+    });
+      //abrir reporte en una nueva pestaña del navegado
+      //agregamos el blog ya que tine guardado el token de jwt
+      //esto es por que la ruta es privada
+    const fileURL = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+    window.open(fileURL, '_blank');
+
+  } catch (error) {
+    console.error("Error al generar el PDF:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Error de Servidor",
+      text: "No se pudo generar el reporte. Verifica tu conexión o intenta buscar otro rango de fechas.",
+      background: '#1c1c21',
+      color: '#ffffff'
+    });
+  } finally {
+    loading.value = false;
+  }
+};
+
+const limpiarFiltros = () => {
+  fechaInicio.value = null;
+  fechaFin.value = null;
+};
 </script>
 
-<style>
-.rock-table .p-datatable-thead > tr > th {
-  background: #0d1520 !important;
-  color: #4fc3f7 !important;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  border-bottom: 1px solid rgba(79,195,247,0.2) !important;
-}
-.rock-table .p-datatable-tbody > tr {
-  background: #111820 !important;
-  color: #c8dde8 !important;
-  border-bottom: 1px solid rgba(255,255,255,0.04) !important;
-}
-.rock-table .p-datatable-tbody > tr:hover {
-  background: rgba(79,195,247,0.04) !important;
-}
-.rock-table .p-datatable-tbody > tr.p-row-odd {
-  background: #0f161e !important;
-}
-.rock-table {
-  border: 1px solid rgba(79,195,247,0.2);
-  border-radius: 12px;
-  overflow: hidden;
-}
 
-/* Calendar */
-.rock-calendar .p-inputtext {
-  background: #0d1520 !important;
-  border: 1px solid rgba(79,195,247,0.2) !important;
-  color: #c8dde8 !important;
-  border-radius: 8px 0 0 8px !important;
-}
-.rock-calendar .p-inputtext::placeholder { color: #4a6070 !important; }
-.rock-calendar .p-inputtext:focus {
-  border-color: rgba(79,195,247,0.5) !important;
-  box-shadow: none !important;
-}
-.rock-calendar .p-button {
-  background: #0d1520 !important;
-  border: 1px solid rgba(79,195,247,0.2) !important;
-  border-left: none !important;
-  color: #4fc3f7 !important;
-  border-radius: 0 8px 8px 0 !important;
-}
- 
-</style>
