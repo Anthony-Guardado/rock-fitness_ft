@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useAuthStore } from '@/stores/authStore'; 
-
+import api from '@/services/api'  // ← agrega esta línea
 const API_URL = 'http://127.0.0.1:8000/api/user';
 
 export const userService = {

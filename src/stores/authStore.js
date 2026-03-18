@@ -9,15 +9,15 @@ export const useAuthStore = defineStore('auth', {
   persist: true,
   getters: {
     isAuthenticated: (state) => !!state.token,
-    isAdmin: (state) => state.user?.roles?.some(role => role.name === 'ADMIN'),
-    isCliente: (state) => state.user?.roles?.some(role => role.name === 'CLIENTE')
+    isAdmin: (state) => state.user?.roles?.some(role => role.name.toUpperCase() === 'ADMIN'),
+    isCliente: (state) => state.user?.roles?.some(role => role.name.toUpperCase() === 'CLIENTE')
   },
   actions: {
     async login(credentials) {
       const { data } = await api.post('/auth/login', credentials)
       this.token = data.access_token
       this.user = data.user
-      return data.user // Devolvemos el usuario para que el componente navegue
+      return data.user
     },
     async register(payload) {
       const { data } = await api.post('/auth/register', payload)
@@ -26,17 +26,14 @@ export const useAuthStore = defineStore('auth', {
       return data.user
     },
     async logout() {
-    try {
-    // Agregamos 'auth/' antes de logout para que coincida con tu api.php
-    if (this.token) await api.post('auth/logout')
-  } catch (error) {
-    console.warn("Error de red al cerrar sesión, limpiando localmente...");
-  } finally {
-    this.$reset()
-    localStorage.removeItem('auth')
-    // Es buena práctica limpiar los headers de axios aquí también
-    // si tu servicio 'api' no lo hace automáticamente al resetear.
-  }
-}
+      try {
+        if (this.token) await api.post('auth/logout')
+      } catch (error) {
+        console.warn("Error de red al cerrar sesión, limpiando localmente...");
+      } finally {
+        this.$reset()
+        localStorage.removeItem('auth')
+      }
+    }
   }
 })
