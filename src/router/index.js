@@ -62,6 +62,7 @@ router.beforeEach((to) => {
     return '/login'
   }
 
+  
 
   if (to.meta.guest && auth.isAuthenticated) {
     return '/'
