@@ -1,9 +1,7 @@
 <template>
-
-
   <div class="flex flex-col gap-6">
     <Toast />
-    <PlanesMembresia v-if="detalle.estado === 'inactiva'" @cerrar="detalle.estado = 'cerrado'" />
+    <PlanesMembresia v-if="detalle.estado === 'inactiva'" @cerrar="mostrarPlanes = false" />
 
     <!-- Card principal del usuario -->
     <div class="bg-[#1F232A] border border-[#23374D] rounded-xl p-8 flex flex-col items-center gap-4">
@@ -57,13 +55,11 @@
       <div class="flex flex-wrap justify-center gap-3 mt-2">
         <Button label="Editar perfil" icon="pi pi-user-edit" @click="abrirModalPerfil" />
 
-        <Button v-if="detalle.estado !== 'cancelada'" label="Cambiar plan" icon="pi pi-sync" severity="secondary"
-          @click="modalPlan = true" />
 
-        <Button v-if="detalle.estado === 'cancelada'" label="Renovar membresía" icon="pi pi-refresh" severity="success"
-          @click="modalPlanes = true" />
+        <Button v-if="detalle.estado === 'cancelada' || detalle.estado === 'inactiva'" label="Renovar membresía"
+          icon="pi pi-refresh" severity="success" @click="mostrarPlanes = true" />
 
-        <Button v-if="detalle.estado !== 'cancelada'" label="Cancelar membresía" icon="pi pi-times-circle"
+        <Button v-if="detalle.estado === 'activa'" label="Cancelar membresía" icon="pi pi-times-circle"
           severity="danger" outlined @click="modalCancelar = true" />
       </div>
 
@@ -152,20 +148,6 @@
       </template>
     </Dialog>
 
-    <!-- MODAL PLANES (cuando membresía cancelada o inactiva) -->
-    <Dialog v-model:visible="modalPlanes" header="ELIGE TU MEMBRESÍA"
-      :style="{ width: '40rem', background: '#1F232A', border: '1px solid #23374D' }" :modal="true">
-      <div class="flex flex-col md:flex-row gap-4 pt-2 justify-center">
-        <div v-for="plan in membresias" :key="plan.id"
-          class="bg-[#242830] border border-[#23374D] rounded-xl p-6 flex flex-col items-center gap-3 flex-1 hover:border-[#4FC3F7] transition-colors cursor-pointer">
-          <h3 class="text-[#F5F5F5] font-bold text-lg">{{ plan.nombre }}</h3>
-          <p class="text-[#B4B4BC] text-sm">{{ plan.duracion_mes }} mes(es)</p>
-          <span class="text-[#4FC3F7] text-2xl font-bold">${{ plan.precio }}</span>
-          <Button label="Elegir" class="w-full" @click="elegirPlan(plan)" />
-        </div>
-      </div>
-    </Dialog>
-
   </div>
 </template>
 
@@ -180,6 +162,7 @@ import PlanesMembresia from '@/components/user/PlanesMembresia.vue'
 
 const toast = useToast()
 const authStore = useAuthStore()
+const mostrarPlanes = ref(true)
 
 const usuario = ref({})
 const detalle = ref({})
@@ -190,7 +173,6 @@ const inputFoto = ref(null)
 const modalPerfil = ref(false)
 const modalPlan = ref(false)
 const modalCancelar = ref(false)
-const modalPlanes = ref(false)
 
 const planSeleccionado = ref(null)
 const loadingPerfil = ref(false)
@@ -211,7 +193,7 @@ const cargarDatos = async () => {
     const [resUsuario, resDetalle, resMembresias] = await Promise.all([
       userService.getPerfil(authStore.user.id),
       membresiaService.getMiMembresia(),
-      membresiaService.getMembresías()
+      membresiaService.getMembresias()
     ])
 
     usuario.value = resUsuario.data
@@ -323,7 +305,7 @@ const cancelarMembresia = async () => {
 
 const elegirPlan = (plan) => {
   console.log('Plan elegido:', plan)
-  modalPlanes.value = false
+  mostrarPlanes.value = false
 }
 </script>
 

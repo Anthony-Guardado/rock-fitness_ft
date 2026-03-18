@@ -12,6 +12,7 @@
     "lint:eslint": "eslint . --fix --cache"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^8.10.0",
     "axios": "^1.13.6",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",

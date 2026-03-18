@@ -16,6 +16,8 @@ export default {
 
     crearIntent(datos) {
         return api.post('/payment/crear-intent', datos)
-    }
+    },
+
+    
 
 }

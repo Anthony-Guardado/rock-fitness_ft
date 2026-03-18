@@ -4,8 +4,7 @@
 
     <div class="flex flex-col items-center gap-8 p-8">
 
-       <button
-        class="absolute top-0 right-0 text-[#B4B4BC] hover:text-[#F5F5F5] transition-colors"
+      <button class="absolute top-0 right-0 text-[#B4B4BC] hover:text-[#F5F5F5] transition-colors"
         @click="$emit('cerrar')">
         <i class="pi pi-times text-xl"></i>
       </button>
@@ -18,79 +17,77 @@
       <!-- Cards -->
       <div class="flex flex-col md:flex-row gap-6">
 
-        <!-- Básica -->
-        <Card style="width: 200px; background: #1F232A; border: 1px solid #23374D;">
+        <Card v-for="plan in membresias" :key="plan.id"
+          style="width: 200px; background: #1F232A; border: 1px solid #23374D;">
           <template #title>
-            <span class="text-[#F5F5F5]">Básica</span>
+            <span class="text-[#F5F5F5]">{{ plan.nombre }}</span>
           </template>
           <template #subtitle>
-            <span class="text-[#B4B4BC]">1 mes</span>
+            <span class="text-[#B4B4BC]">{{ plan.duracion_mes }} mes(es)</span>
           </template>
           <template #content>
-            <p class="text-[#4FC3F7] text-3xl font-bold text-center m-0">$15.00</p>
+            <p class="text-[#4FC3F7] text-3xl font-bold text-center m-0">${{ plan.precio }}</p>
           </template>
           <template #footer>
-            <Button
-              label="Elegir"
-              class="w-full"
-              @click="elegir('basica')"
-            />
+            <Button label="Elegir" class="w-full" @click="elegir(plan)" />
           </template>
         </Card>
-
-        <!-- Premium -->
-        <Card style="width: 200px; background: #1F232A; border: 2px solid #4FC3F7;">
-          <template #title>
-            <div class="flex items-center justify-between">
-              <span class="text-[#F5F5F5]">Premium</span>
-              <span class="text-xs bg-[#4FC3F7] text-[#181A1F] font-bold px-2 py-1 rounded-full">Popular</span>
-            </div>
-          </template>
-          <template #subtitle>
-            <span class="text-[#B4B4BC]">3 meses</span>
-          </template>
-          <template #content>
-            <p class="text-[#4FC3F7] text-3xl font-bold text-center m-0">$30.00</p>
-          </template>
-          <template #footer>
-            <Button
-              label="Elegir"
-              class="w-full"
-              @click="elegir('premium')"
-            />
-          </template>
-        </Card>
-
-        <!-- VIP -->
-        <Card style="width: 200px; background: #1F232A; border: 1px solid #23374D;">
-          <template #title>
-            <span class="text-[#F5F5F5]">VIP</span>
-          </template>
-          <template #subtitle>
-            <span class="text-[#B4B4BC]">6 meses</span>
-          </template>
-          <template #content>
-            <p class="text-[#4FC3F7] text-3xl font-bold text-center m-0">$60.00</p>
-          </template>
-          <template #footer>
-            <Button
-              label="Elegir"
-              class="w-full"
-              @click="elegir('vip')"
-            />
-          </template>
-        </Card>
-
       </div>
+
+      <StripeForm v-if="clientSecret" :clientSecret="clientSecret" />
 
     </div>
   </div>
 </template>
 
 <script setup>
-const elegir = (plan) => {
-  // Después aquí se emite el plan elegido y se abre el modal de pago
-  console.log('Plan elegido:', plan)
+import { ref, onMounted } from 'vue'
+import membresiaService from '@/services/membresiaService'
+import pagoService from '@/services/pagoService'
+import StripeForm from '@/components/user/StripeForm.vue'
+
+
+defineEmits(['cerrar'])
+
+const membresias = ref([])
+const loading = ref(false)
+
+
+onMounted(async () => {
+  const { data } = await membresiaService.getMembresias()
+  console.log(data)
+  membresias.value = data
+
+})
+
+const clientSecret = ref(null)
+
+const elegir = async (plan) => {
+  loading.value = true
+  try {
+    await membresiaService.seleccionar({ membresia_id: plan.id })
+
+    const { data: detalle } = await membresiaService.getMiMembresia()
+
+    const { data: pago } = await pagoService.crearPago({
+      detalle_membresia_id: detalle.data.id,
+      metodo_pago_id: 1
+    })
+
+    const { data: intent } = await pagoService.crearIntent({
+      pago_id: pago.pago_id
+    })
+
+    clientSecret.value = intent.client_secret
+
+  } catch (error) {
+    console.error(error)
+  } finally {
+    loading.value = false
+  }
 }
+
+
+
 
 </script>

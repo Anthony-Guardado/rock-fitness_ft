@@ -6,7 +6,7 @@ export default {
         return api.get(`/detalle_membresias/miMembresia`)
     },
 
-    getMembresías() {
+    getMembresias() {
         return api.get('/membresias')
     },
 
@@ -20,6 +20,9 @@ export default {
 
     cambiarEstado(id, datos) {
         return api.patch(`/detalle_membresias/${id}/estado`, datos)
-    }
+    },
 
+    seleccionar(datos) {
+    return api.post('/detalle_membresias/seleccionar', datos)
+}
 }
