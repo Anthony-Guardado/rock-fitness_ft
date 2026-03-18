@@ -243,7 +243,7 @@ const validar = () => {
 
 
 const guardarPerfil = async () => {
- if (!validar()) return   // 👈 ESTA LÍNEA ES LA CLAVE
+ if (!validar()) return   
 
   loadingPerfil.value = true
   try {
