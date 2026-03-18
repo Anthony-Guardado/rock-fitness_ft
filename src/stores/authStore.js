@@ -21,10 +21,11 @@ export const useAuthStore = defineStore("auth", {
       return data.user; // Devolvemos el usuario para que el componente navegue
     },
     async register(payload) {
-      const { data } = await api.post("/auth/register", payload);
-      this.token = data.access_token;
-      this.user = data.user;
-      return data.user;
+      const { data } = await api.post('/auth/register', payload)
+
+      this.token = data.access_token
+      this.user = data.user
+      return data.user
     },
     async logout() {
       const confirmacion = await Swal.fire({

@@ -91,10 +91,11 @@
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 
 const route = useRoute();
+const router = useRouter();
 const authStore = useAuthStore();
 
 const loading = ref(false);
@@ -187,9 +188,14 @@ const sendRegister = async () => {
       formData.append('imagenes[]', imageFile.value);
     }
 
-    //Enviamos el FormData al store para que pueda iniciar de una vez en la pestaña principal
+    //al registrarse correctamente nos dijere a dashboard
     await authStore.register(formData);
-    /* Atrapa los errores para mostrar el mensaje */
+    if (authStore.isAdmin) {
+      router.push('/admin/AdminDashboard');
+    } else {
+      router.push('/dashboard');
+    }
+
   } catch (err) {
     if (err.response?.status === 422) {
       console.log(err.response.data);
