@@ -23,8 +23,7 @@
             <i class="pi pi-envelope absolute left-3 top-1/2 -translate-y-1/2 text-gym-muted"></i>
             <input v-model="form.email" type="email" placeholder="ana.prendas@gmail.com"
               class="w-full bg-gym-input border border-gym-border text-gym-inputText placeholder-gym-muted
-              rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-gym-accent focus:ring-1 focus:ring-gym-accent transition-all"
-              required :disabled="loading" />
+              rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:border-gym-accent focus:ring-1 focus:ring-gym-accent transition-all" required :disabled="loading" />
           </div>
         </div>
 
@@ -37,15 +36,13 @@
           </div>
           <div class="relative">
             <i class="pi pi-lock absolute left-3 top-1/2 -translate-y-1/2 text-gym-muted"></i>
-            <input v-model="form.password" type="password" placeholder="••••••••"
-              class="w-full bg-gym-input border border-gym-border text-gym-inputText placeholder-gym-muted rounded-lg pl-10 pr-4
+            <input v-model="form.password" type="password" placeholder="••••••••" class="w-full bg-gym-input border border-gym-border text-gym-inputText placeholder-gym-muted rounded-lg pl-10 pr-4
               py-3 focus:outline-none focus:border-gym-accent focus:ring-1 focus:ring-gym-accent transition-all"
               required :disabled="loading" />
           </div>
         </div>
 
-        <button type="submit" :disabled="loading"
-          class="w-full bg-gym-accent hover:bg-[#3ab0e5] text-gym-base font-poppins font-bold text-lg py-3 rounded-lg transition-colors
+        <button type="submit" :disabled="loading" class="w-full bg-gym-accent hover:bg-[#3ab0e5] text-gym-base font-poppins font-bold text-lg py-3 rounded-lg transition-colors
           mt-2 flex justify-center items-center disabled:opacity-70 disabled:cursor-not-allowed">
           <span v-if="!loading">Iniciar Sesión</span>
           <span v-else>
@@ -70,6 +67,8 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
+import Swal from 'sweetalert2'
+
 
 // Inicializamos herramientas
 const authStore = useAuthStore()
@@ -102,6 +101,15 @@ const handleLogin = async () => {
       // Coincide con el path: '/dashboard' del cliente
       router.push('/dashboard')
     }
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "success",
+      title: "Sesión iniciada correctamente",
+      showConfirmButton: false,
+      timer: 1500
+    })
+
 
   } catch (err) {
     // 3. Manejo de errores amigable

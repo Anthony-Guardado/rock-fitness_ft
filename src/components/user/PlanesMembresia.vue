@@ -32,7 +32,8 @@
             <p class="text-[#4FC3F7] text-3xl font-bold text-center m-0">${{ plan.precio }}</p>
           </template>
           <template #footer>
-            <Button label="Elegir" class="w-full" :disabled="pagoStore.procesandoPago" @click="elegir(plan)" />
+            <Button label="Elegir" class="w-full"
+              :disabled="pagoStore.procesandoPago || pagoStore.planBloqueadoId !== null" @click="elegir(plan)" />
           </template>
         </Card>
       </div>

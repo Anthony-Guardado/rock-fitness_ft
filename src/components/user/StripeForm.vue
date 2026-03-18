@@ -21,6 +21,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { loadStripe } from '@stripe/stripe-js'
+import Swal from 'sweetalert2'
+import { useRouter } from 'vue-router'
+import { usePagoStore } from '@/stores/paymentStore'
+
+const router = useRouter()
+const pagoStore = usePagoStore()
 
 const props = defineProps({
   clientSecret: String
@@ -32,7 +38,6 @@ const cardElement = ref(null)
 const loading = ref(false)
 
 onMounted(async () => {
-
   stripe.value = await loadStripe('pk_test_51T9HtjAt6Wk0y7PJWVQGgdKlVXmrlXJQHr6GsIYcvhCrgQEaceFMwZXQ8MauXafUFBorD8aF81Ru58Heg8ruYt9m00Hhp17uPI')
 
   elements.value = stripe.value.elements({
@@ -40,34 +45,48 @@ onMounted(async () => {
   })
 
   cardElement.value = elements.value.create('card')
-
   cardElement.value.mount('#card-element')
-
 })
 
 const pagar = async () => {
-
   loading.value = true
 
   try {
-
-    const { error, paymentIntent } =
-      await stripe.value.confirmCardPayment(props.clientSecret, {
-        payment_method: {
-          card: cardElement.value
-        }
-      })
+    const { error, paymentIntent } = await stripe.value.confirmCardPayment(props.clientSecret, {
+      payment_method: {
+        card: cardElement.value
+      }
+    })
 
     if (error) {
       console.error(error.message)
+      await Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: 'No se pudo procesar el pago',
+        text: error.message,
+        showConfirmButton: false,
+        timer: 1800
+      })
       return
     }
 
-    console.log('Pago exitoso', paymentIntent)
+    if (paymentIntent.status === 'succeeded') {
+      pagoStore.limpiarPago()
+
+      await Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Pago realizado correctamente',
+        showConfirmButton: false,
+        timer: 1500
+      })
+
+      window.location.reload()
+    }
 
   } catch (error) {
     console.error(error)
-
   } finally {
     loading.value = false
   }

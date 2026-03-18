@@ -9,11 +9,13 @@ export const usePagoStore = defineStore('pago', () => {
   const pagoActual = ref(null)
   const nombreMembresia = ref('')
   const montoMembresia = ref(0)
+  const planBloqueadoId = ref(null)
 
   const iniciarPagoMembresia = async (plan) => {
-    if (procesandoPago.value) return
+    if (procesandoPago.value || planBloqueadoId.value) return
 
-    procesandoPago.value = true
+  planBloqueadoId.value = plan.id
+  procesandoPago.value = true
 
     try {
       await membresiaService.seleccionar({
@@ -63,6 +65,7 @@ export const usePagoStore = defineStore('pago', () => {
     nombreMembresia.value = ''
     montoMembresia.value = 0
     procesandoPago.value = false
+    planBloqueadoId.value = null
   }
 
   const cancelarMembresia = async (usuarioId) => {
@@ -84,6 +87,7 @@ export const usePagoStore = defineStore('pago', () => {
     pagoActual,
     nombreMembresia,
     montoMembresia,
+    planBloqueadoId,
     cancelarMembresia,
     iniciarPagoMembresia,
     cerrarPago,
