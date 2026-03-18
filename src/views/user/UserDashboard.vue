@@ -143,22 +143,29 @@ const fotoUrl = ref(null)
 const inputFoto = ref(null)
 
 const modalPerfil = ref(false)
-const modalPlan = ref(false)
-const modalCancelar = ref(false)
 
-const planSeleccionado = ref(null)
+const modalCancelar = ref(false)
 const loadingPerfil = ref(false)
-const loadingPlan = ref(false)
 const loadingCancelar = ref(false)
+const fotoFile = ref(null)
 
 const form = ref({
   email: '',
   telefono: ''
 })
 
+const cambiarFoto = (e) => {
+  const archivo = e.target.files[0]
+  if (archivo) {
+    fotoFile.value = archivo
+    fotoUrl.value = URL.createObjectURL(archivo)
+  }
+}
+
 onMounted(() => {
   cargarDatos()
 })
+
 
 const cargarDatos = async () => {
   try {
@@ -184,6 +191,7 @@ const cargarDatos = async () => {
   }
 }
 
+
 const formatFecha = (fecha) => {
   if (!fecha) return '-'
   const d = new Date(fecha)
@@ -198,12 +206,7 @@ const getSeverity = (estado) => {
   return null
 }
 
-const cambiarFoto = (e) => {
-  const archivo = e.target.files[0]
-  if (archivo) {
-    fotoUrl.value = URL.createObjectURL(archivo)
-  }
-}
+
 
 const abrirModalPerfil = () => {
   form.value.email = usuario.value.email
@@ -211,7 +214,37 @@ const abrirModalPerfil = () => {
   modalPerfil.value = true
 }
 
+const validar = () => {
+  const telefonoRegex = /^[267]\d{3}-?\d{4}$/
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+  if (!telefonoRegex.test(form.value.telefono)) {
+    toast.add({
+      severity: 'warn',
+      summary: 'Teléfono inválido',
+      detail: 'Debe tener formato 1234-5678',
+      life: 3000
+    })
+    return false
+  }
+
+  if (!emailRegex.test(form.value.email)) {
+    toast.add({
+      severity: 'warn',
+      summary: 'Correo inválido',
+      detail: 'Ingresa un correo válido',
+      life: 3000
+    })
+    return false
+  }
+
+  return true
+}
+
+
 const guardarPerfil = async () => {
+ if (!validar()) return   // 👈 ESTA LÍNEA ES LA CLAVE
+
   loadingPerfil.value = true
   try {
     const formData = new FormData()
@@ -219,6 +252,10 @@ const guardarPerfil = async () => {
       email: form.value.email,
       telefono: form.value.telefono
     }))
+
+    if (fotoFile.value) {
+      formData.append('imagenes[]', fotoFile.value)
+    }
 
     const { status, data } = await userService.update(authStore.user.id, formData)
 
