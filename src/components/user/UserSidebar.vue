@@ -72,9 +72,7 @@ const handleLogout = async () => {
   } catch (error) {
     console.warn("Error de red al cerrar sesión, forzando salida local.")
   } finally {
-    // Cerramos el sidebar si estamos en móvil para que no quede abierto al volver
     emit('navigate')
-    // Redirigimos al inicio
     router.push('/')
   }
 }

@@ -69,13 +69,10 @@ const router = useRouter()
 
 const handleLogout = async () => {
   try {
-    // Intentamos el cierre formal en el backend
     await authStore.logout()
   } catch (error) {
-    // Si la API falla (como el 404 que vimos), el store debe limpiar el token igualmente
     console.warn("Error en logout de red, procediendo con limpieza local.")
   } finally {
-    // Forzamos la redirección al home y limpieza de la interfaz
     router.push('/')
   }
 }

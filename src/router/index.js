@@ -1,7 +1,6 @@
+//Importaciones de los componentes
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '@/stores/authStore' // Importante para el guardián
-
-// Importaciones directas
+import { useAuthStore } from '@/stores/authStore'
 import HomeView from '@/views/home/HomeView.vue'
 import Login from '@/views/auth/Login.vue'
 import RecuperarContrasena from '@/views/auth/RecuperarContrasena.vue'
@@ -9,7 +8,7 @@ import RestablecerContrasena from '@/views/auth/RestablecerContrasena.vue'
 import Register from '@/views/auth/Register.vue'
 import UserLayout from '@/components/layouts/UserLayout.vue'
 import UserDashboard from '@/views/user/UserDashboard.vue'
-import HistorialPagos from '@/views/user/HistorialPagos.vue' // <--- Tu archivo de pagos
+import HistorialPagos from '@/views/user/HistorialPagos.vue'
 import AdminLayout from '@/components/layouts/AdminLayout.vue'
 
 const router = createRouter({
@@ -22,7 +21,7 @@ const router = createRouter({
     { path: '/restablecer-contrasena', component: RestablecerContrasena },
     { path: '/suscripciones', component: () => import('@/views/home/Suscripciones.vue') },
 
-    // --- RUTA CLIENTE ---
+    //Rutas del cliente
     {
       path: '/dashboard',
       component: UserLayout,
@@ -33,7 +32,7 @@ const router = createRouter({
       ]
     },
 
-    // --- RUTA ADMIN ---
+    //Rutas del administrador
     {
       path: "/admin",
       component: AdminLayout,
@@ -49,34 +48,31 @@ const router = createRouter({
   ]
 })
 
-// GUARDÍAN DE NAVEGACIÓN BLINDADO (Vue Router 4)
+
 router.beforeEach((to) => {
   const auth = useAuthStore()
 
-  // 1. Escaneamos si la ruta a la que va (O CUALQUIERA DE SUS PADRES) requiere auth
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
-  // 2. Escaneamos si la ruta a la que va (O CUALQUIERA DE SUS PADRES) exige un rol
+
   const requiredRole = to.matched.find(record => record.meta.role)?.meta.role
 
-  // REGLA A: Si requiere login y no está autenticado -> Al login
+
   if (requiresAuth && !auth.isAuthenticated) {
     return '/login'
   }
 
-  // REGLA B: Si ya está logueado y quiere ir al login/registro -> Al inicio
+
   if (to.meta.guest && auth.isAuthenticated) {
     return '/'
   }
 
-  // REGLA C: Validación estricta de Roles (Protege Admin y Cliente)
   if (requiredRole && auth.isAuthenticated) {
-    // Verificamos si el usuario tiene el rol que pide la ruta
+    // Verificamos si el rol del usuario es igual ala ruta que puede acceder
     const hasRole = auth.user?.roles?.some(r => r.name.toUpperCase() === requiredRole.toUpperCase())
 
     if (!hasRole) {
       console.warn(`Acceso denegado: Necesitas ser ${requiredRole}`)
-      // Redirección inteligente: si es Admin lo mandamos a su panel, si no, al home
       return auth.isAdmin ? '/admin/AdminDashboard' : '/'
     }
   }
