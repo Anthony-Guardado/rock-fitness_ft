@@ -1,7 +1,8 @@
 <template>
   <div class="flex flex-col gap-6">
     <Toast />
-    <PlanesMembresia v-if="detalle.estado === 'inactiva'" @cerrar="mostrarPlanes = false" />
+    <PlanesMembresia v-if="(detalle.estado === 'inactiva' || detalle.estado === 'cancelada') && mostrarPlanes"
+      @cerrar="mostrarPlanes = false" />
 
     <!-- Card principal del usuario -->
     <div class="bg-[#1F232A] border border-[#23374D] rounded-xl p-8 flex flex-col items-center gap-4">
@@ -99,35 +100,6 @@
       </template>
     </Dialog>
 
-    <!-- MODAL CAMBIAR PLAN -->
-    <Dialog v-model:visible="modalPlan" header="CAMBIAR PLAN"
-      :style="{ width: '30rem', background: '#1F232A', border: '1px solid #23374D' }" :modal="true">
-      <div class="flex flex-col gap-4 pt-2">
-        <span class="text-[#B4B4BC] text-sm">Selecciona tu nuevo plan:</span>
-
-        <div class="flex flex-col gap-3">
-          <div v-for="plan in membresias" :key="plan.id" :class="[
-            'flex items-center justify-between p-4 rounded-lg border cursor-pointer transition-colors duration-200',
-            planSeleccionado === plan.id
-              ? 'border-[#4FC3F7] bg-[#4FC3F7]/10'
-              : 'border-[#23374D] bg-[#242830]'
-          ]" @click="planSeleccionado = plan.id">
-            <div>
-              <p class="text-[#F5F5F5] font-semibold text-sm m-0">{{ plan.nombre }}</p>
-              <p class="text-[#B4B4BC] text-xs m-0">{{ plan.duracion_mes }} mes(es)</p>
-            </div>
-            <span class="text-[#4FC3F7] font-bold">${{ plan.precio }}</span>
-          </div>
-        </div>
-      </div>
-
-      <template #footer>
-        <div class="flex gap-2">
-          <Button label="Cancelar" severity="secondary" outlined class="w-full" @click="modalPlan = false" />
-          <Button label="Cambiar plan" class="w-full" :loading="loadingPlan" @click="guardarCambioPlan" />
-        </div>
-      </template>
-    </Dialog>
 
     <!-- MODAL CANCELAR MEMBRESÍA -->
     <Dialog v-model:visible="modalCancelar" header="CANCELAR MEMBRESÍA"
@@ -262,32 +234,11 @@ const guardarPerfil = async () => {
   }
 }
 
-const guardarCambioPlan = async () => {
-  if (!planSeleccionado.value) return
-
-  loadingPlan.value = true
-  try {
-    const { status, data } = await membresiaService.cambiarPlan(detalle.value.id, {
-      membresia_id: planSeleccionado.value
-    })
-
-    if (status === 200) {
-      await cargarDatos()
-      modalPlan.value = false
-      toast.add({ severity: 'success', summary: 'Éxito', detail: data.message, life: 3000 })
-    }
-  } catch (error) {
-    const msg = error.response?.data?.message || 'No se pudo cambiar el plan'
-    toast.add({ severity: 'error', summary: 'Error', detail: msg, life: 3000 })
-  } finally {
-    loadingPlan.value = false
-  }
-}
 
 const cancelarMembresia = async () => {
   loadingCancelar.value = true
   try {
-    const { status, data } = await membresiaService.cambiarEstado(detalle.value.id, {
+    const { status, data } = await membresiaService.cambiarEstado(authStore.user.id, {
       estado: 'cancelada'
     })
 
@@ -303,10 +254,7 @@ const cancelarMembresia = async () => {
   }
 }
 
-const elegirPlan = (plan) => {
-  console.log('Plan elegido:', plan)
-  mostrarPlanes.value = false
-}
+
 </script>
 
 <style>
