@@ -1,6 +1,9 @@
 <template>
+
+
   <div class="flex flex-col gap-6">
     <Toast />
+    <PlanesMembresia v-if="detalle.estado === 'inactiva'" @cerrar="detalle.estado = 'cerrado'" />
 
     <!-- Card principal del usuario -->
     <div class="bg-[#1F232A] border border-[#23374D] rounded-xl p-8 flex flex-col items-center gap-4">
@@ -173,6 +176,7 @@ import { useAuthStore } from '@/stores/authStore'
 import Tag from 'primevue/tag'
 import userService from '@/services/userService'
 import membresiaService from '@/services/membresiaService'
+import PlanesMembresia from '@/components/user/PlanesMembresia.vue'
 
 const toast = useToast()
 const authStore = useAuthStore()
