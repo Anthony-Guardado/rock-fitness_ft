@@ -74,7 +74,6 @@
 
 
 <style scoped>
-/* Transiciones suaves para los hover de los enlaces */
 a {
   text-decoration: none;
 }

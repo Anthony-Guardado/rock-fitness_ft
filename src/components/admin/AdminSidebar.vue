@@ -2,49 +2,83 @@
   <aside class="w-52 min-w-[210px] h-full bg-[#111820] border-r border-cyan-500/15 flex flex-col pt-4">
     <nav class="flex flex-col gap-1 px-2 flex-1">
 
-      <router-link to="/admin/AdminDashboard" exact
-        class="nav-item"
-        active-class="nav-item-active">
-        <i class="pi pi-home text-base" />
-        <span>Inicio</span>
-      </router-link>
+      <template v-if="authStore.isAuthenticated && authStore.isAdmin">
+        <div class="px-3 mb-2 text-[10px] uppercase tracking-wider text-slate-500 font-bold">Admin Menú</div>
 
-      <router-link to="/admin/GestionUsuarios"
-        class="nav-item"
-        active-class="nav-item-active">
-        <i class="pi pi-users text-base" />
-        <span>Gestión de Usuarios</span>
-      </router-link>
+        <router-link to="/admin/AdminDashboard" class="nav-item" active-class="nav-item-active">
+          <i class="pi pi-home text-base" />
+          <span>Inicio Admin</span>
+        </router-link>
 
-      <router-link to="/admin/GestionMembresias"
-        class="nav-item"
-        active-class="nav-item-active">
-        <i class="pi pi-id-card text-base" />
-        <span>Gestión de membresías</span>
-      </router-link>
+        <router-link to="/admin/GestionUsuarios" class="nav-item" active-class="nav-item-active">
+          <i class="pi pi-users text-base" />
+          <span>Usuarios</span>
+        </router-link>
 
-      <router-link to="/admin/Reportes"
-        class="nav-item"
-        active-class="nav-item-active">
-        <i class="pi pi-file text-base" />
-        <span>Reporte de pagos</span>
-      </router-link>
+        <router-link to="/admin/GestionMembresias" class="nav-item" active-class="nav-item-active">
+          <i class="pi pi-id-card text-base" />
+          <span>Membresías</span>
+        </router-link>
 
-      <button
-        class="nav-item mt-auto hover:!bg-red-500/10 hover:!text-red-400"
-        @click="handleLogout">
-        <i class="pi pi-sign-out text-base" />
-        <span>Salir</span>
-      </button>
+        <router-link to="/admin/GestionPagos" class="nav-item" active-class="nav-item-active">
+          <i class="pi pi-money-bill text-base" />
+          <span>Gestión Pagos</span>
+        </router-link>
+
+        <router-link to="/admin/Reportes" class="nav-item" active-class="nav-item-active">
+          <i class="pi pi-file text-base" />
+          <span>Reportes</span>
+        </router-link>
+      </template>
+
+      <template v-if="authStore.isAuthenticated && !authStore.isAdmin">
+        <div class="px-3 mb-2 text-[10px] uppercase tracking-wider text-slate-500 font-bold">Mi Espacio</div>
+
+        <router-link to="/dashboard" class="nav-item" active-class="nav-item-active">
+          <i class="pi pi-th-large text-base" />
+          <span>Mi Panel</span>
+        </router-link>
+
+        <router-link to="/dashboard/pagos" class="nav-item" active-class="nav-item-active">
+          <i class="pi pi-history text-base" />
+          <span>Historial Pagos</span>
+        </router-link>
+      </template>
+
+      <div class="mt-auto border-t border-white/5 pt-4 mb-4">
+        <button
+          v-if="authStore.isAuthenticated"
+          class="nav-item hover:!bg-red-500/10 hover:!text-red-400 group"
+          @click="handleLogout"
+        >
+          <i class="pi pi-sign-out text-base group-hover:rotate-180 transition-transform duration-300" />
+          <span>Cerrar Sesión</span>
+        </button>
+      </div>
 
     </nav>
   </aside>
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'vue-router'
+
+const authStore = useAuthStore()
 const router = useRouter()
-const handleLogout = () => router.push('/login')
+
+const handleLogout = async () => {
+  try {
+    // Intentamos el cierre formal en el backend
+    await authStore.logout()
+  } catch (error) {
+    // Si la API falla (como el 404 que vimos), el store debe limpiar el token igualmente
+    console.warn("Error en logout de red, procediendo con limpieza local.")
+  } finally {
+    // Forzamos la redirección al home y limpieza de la interfaz
+    router.push('/')
+  }
+}
 </script>
 
 <style scoped>
