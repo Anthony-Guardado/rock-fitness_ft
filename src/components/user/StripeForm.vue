@@ -33,7 +33,7 @@ const loading = ref(false)
 
 onMounted(async () => {
 
-  stripe.value = await loadStripe('pk_test_51T9HtjAt6Wk0y7PJWVQGgdKlVXmrlXJQHr6GsIYcvhCrgQEaceFMwZXQ8MauXafUFBorD8aF81Ru58Heg8ruYt9m00Hhp17uPI')
+  stripe.value = await loadStripe('pk_test_51TC4Y3HTTnTtFLGxbj9WG499CrH1Dj5SMtHJamM7KYHOlH6hSr97jUyDbVw11ZsaA03NQq0B2V2PNDmvAgCzrI6i00pFQRrdBe')
 
   elements.value = stripe.value.elements({
     clientSecret: props.clientSecret
