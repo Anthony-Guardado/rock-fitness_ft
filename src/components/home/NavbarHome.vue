@@ -77,6 +77,6 @@ const router = useRouter()
 
 const handleLogout = async () => {
   await authStore.logout()
-  router.push('/') // Volver al home por path
+  router.push('/') 
 }
 </script>

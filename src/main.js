@@ -18,7 +18,6 @@ import 'primeicons/primeicons.css'
 const app = createApp(App)
 
 setupPrimeVue(app)
-//creamos instancia de pinia
 const pinia = createPinia()
 //hacemos que pinia use el plugin de persistencia del estado
 pinia.use(piniaPluginPersistedstate)

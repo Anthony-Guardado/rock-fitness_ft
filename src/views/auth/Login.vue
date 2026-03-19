@@ -70,36 +70,32 @@ import { useAuthStore } from '@/stores/authStore'
 import Swal from 'sweetalert2'
 
 
-// Inicializamos herramientas
 const authStore = useAuthStore()
 const router = useRouter()
 
-// Variables de estado local
+
 const loading = ref(false)
 const errorMessage = ref(null)
 
-// Objeto reactivo para capturar los inputs
+
 const form = reactive({
   email: '',
   password: ''
 })
 
-// Función principal de acceso
+
 const handleLogin = async () => {
   loading.value = true
   errorMessage.value = null
-  
+
 
   try {
-    // 1. Intentamos el login a través del store
     await authStore.login(form)
 
-    // 2. Redirección por PATH DIRECTO (más seguro para tu configuración)
     if (authStore.isAdmin) {
-      // Coincide con el path: '/admin/AdminDashboard' de tu index.js
       router.push('/admin/AdminDashboard')
     } else {
-      // Coincide con el path: '/dashboard' del cliente
+
       router.push('/dashboard')
     }
     Swal.fire({
@@ -113,7 +109,7 @@ const handleLogin = async () => {
 
 
   } catch (err) {
-    // 3. Manejo de errores amigable
+  
     if (err.response?.status === 401) {
       errorMessage.value = 'Correo o contraseña incorrectos.'
     } else if (err.response?.status === 422) {

@@ -20,17 +20,17 @@
         @navigate="closeSidebar"
       />
 
-      <!-- Contenido principal -->
+
       <main
         :class="[
           'flex-1 p-6 overflow-y-auto transition-all duration-300',
           !isMobile ? 'ml-60' : ''
         ]"
       >
-        <!-- Overlay de planes si membresía vencida -->
+
         <PlanesMembresia v-if="membresiaVencida" />
 
-        <!-- Aquí se renderizan las vistas -->
+
         <router-view />
       </main>
 
@@ -49,7 +49,7 @@ import PlanesMembresia from '@/components/user/PlanesMembresia.vue'
 const sidebarOpen = ref(false)
 const isMobile = ref(false)
 
-// Por ahora hardcodeado, después viene del store
+
 const membresiaVencida = ref(false)
 
 const toggleSidebar = () => {

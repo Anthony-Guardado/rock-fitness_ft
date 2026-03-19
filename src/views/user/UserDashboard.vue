@@ -16,7 +16,7 @@
       </div>
       <input type="file" accept="image/*" ref="inputFoto" class="hidden" @change="cambiarFoto" />
 
-      <!-- Nombre y correo -->
+
       <div class="text-center">
         <h2 class="text-[#F5F5F5] text-xl font-bold">{{ usuario.nombre }} {{ usuario.apellido }}</h2>
         <p class="text-[#B4B4BC] text-sm">{{ usuario.email }}</p>
@@ -52,7 +52,7 @@
         </div>
       </div>
 
-      <!-- Botones -->
+     
       <div class="flex flex-wrap justify-center gap-3 mt-2">
         <Button label="Editar perfil" icon="pi pi-user-edit" @click="abrirModalPerfil" />
 

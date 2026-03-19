@@ -1,6 +1,5 @@
 <template>
-  <!-- aca hay unos estilos globales que estan desde la configuracion de tailwind
-  ya que los colores de la empresa ya estan difinidos -->
+  
   <div class="min-h-screen flex flex-col bg-gym-base text-gym-text font-inter">
 
     <NavbarHome />

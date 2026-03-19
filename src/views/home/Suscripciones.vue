@@ -78,14 +78,14 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '@/services/api'
 
-// 3. Importamos el componente NavbarHome
+
 import NavbarHome from '@/components/home/NavbarHome.vue'
 
 const router = useRouter()
 const membresias = ref([])
 const loading = ref(true)
 
-// Función visual: Si hay 3 planes, destacamos el de en medio (índice 1).
+
 const destacarPlan = (index) => {
   return index === 1
 }
