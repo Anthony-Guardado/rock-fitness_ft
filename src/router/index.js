@@ -40,7 +40,7 @@ const router = createRouter({
       children: [
         { path: 'AdminDashboard', component: () => import("@/views/admin/AdminDashboard.vue") },
         { path: 'GestionMembresias', component: () => import("@/views/admin/GestionMembresias.vue") },
-        { path: 'GestionPagos', component: () => import("@/views/admin/GestionPagos.vue") },
+        //{ path: 'GestionPagos', component: () => import("@/views/admin/GestionPagos.vue") },
         { path: 'GestionUsuarios', component: () => import("@/views/admin/GestionUsuarios.vue") },
         { path: 'Reportes', component: () => import("@/views/admin/Reportes.vue") }
       ]

@@ -1,20 +1,58 @@
 <template>
-  <Dialog :visible="visible" modal :style="{ width: '420px' }" @update:visible="$emit('close')" :showHeader="false">
-    <div class="flex flex-column align-items-center pt-4 pb-2 px-3">
-      <div class="w-full flex justify-content-end mb-2">
-        <Button icon="pi pi-times" text severity="danger" @click="$emit('close')" />
+  <Dialog 
+    :visible="visible" 
+    modal 
+    :style="{ width: '400px' }" 
+    @update:visible="$emit('close')" 
+    :showHeader="false"
+  >
+    <div class="bg-slate-900 text-white rounded-2xl px-6 py-7 relative shadow-xl">
+
+      <!-- Cerrar -->
+      <button 
+        class="absolute top-4 right-4 text-red-400 hover:text-red-600 text-xl"
+        @click="$emit('close')"
+      >
+        ✕
+      </button>
+
+      <!-- Icono -->
+      <div class="flex justify-center mb-4 mt-2">
+        <div class="bg-yellow-500/20 text-yellow-400 p-4 rounded-full text-2xl">
+          ⏸️
+        </div>
       </div>
-      <p class="text-white text-center text-lg mb-4">
-        ¿Deseas suspender la membresía de este usuario?
+
+      <!-- Título -->
+      <p class="text-center text-xl font-semibold mb-1">
+        ¿Deseas suspender la  membresía a este usuario?
       </p>
-      <InputText
-        :value="membresia?.user?.nombre + ' ' + membresia?.user?.apellido"
-        disabled class="w-full mb-4"
-      />
-      <div class="flex gap-3 w-full justify-content-center">
-        <Button label="Si, deseo Suspender" class="p-button-cyan" @click="confirmar" :loading="saving" />
-        <Button label="Cancelar" severity="danger" @click="$emit('close')" />
+
+      
+
+      <!-- Usuario -->
+      <div class="bg-slate-800 rounded-md px-3 py-2 text-center mb-6">
+        {{ membresia?.user?.nombre }} {{ membresia?.user?.apellido }}
       </div>
+
+      <!-- Botones -->
+      <div class="flex gap-4 mt-2">
+        <button
+          class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2.5 rounded-lg transition"
+          @click="confirmar"
+          :disabled="saving"
+        >
+          {{ saving ? 'Suspendiendo...' : 'Sí, suspender' }}
+        </button>
+
+        <button
+          class="flex-1 bg-red-500 hover:bg-red-600 text-white font-semibold py-2.5 rounded-lg transition"
+          @click="$emit('close')"
+        >
+          Cancelar
+        </button>
+      </div>
+
     </div>
   </Dialog>
 </template>
@@ -40,6 +78,14 @@ const confirmar = async () => {
 </script>
 
 <style scoped>
-:deep(.p-inputtext) { background: #1a2535 !important; color: #fff !important; padding: 0.75rem !important; border-radius: 6px !important; width: 100% !important; }
-:deep(.p-dialog-content) { background: #0d1520; border-radius: 10px; }
-</style>
+:deep(.p-dialog-mask) {
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+:deep(.p-dialog-content) {
+  background: transparent !important;
+  padding: 0;
+  border-radius: 16px;
+}
+</style>>

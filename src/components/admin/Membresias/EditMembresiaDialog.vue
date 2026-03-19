@@ -1,38 +1,82 @@
 <template>
-  <Dialog :visible="visible" modal header="EDITAR MEMBRESÍA" :style="{ width: '420px' }" @update:visible="$emit('close')">
-    <div class="grid p-fluid mt-2" v-if="local">
+  <Dialog 
+    :visible="visible" 
+    modal 
+    :style="{ width: '420px' }" 
+    @update:visible="$emit('close')" 
+    :showHeader="false"
+  >
+    <div class="bg-slate-900 text-white rounded-2xl px-6 py-7 relative shadow-xl">
 
-      <div class="col-6 mb-3">
-        <label class="text-xs text-blue-400 ml-1">Tipo actual</label>
-        <InputText :value="local.membresia?.nombre" disabled class="mt-1" />
+      
+      <button 
+        class="absolute top-4 right-4 text-red-400 hover:text-red-600 text-xl"
+        @click="$emit('close')"
+      >
+        ✕
+      </button>
+
+      
+      <p class="text-center text-xl font-semibold mb-1">
+        Editar membresía
+      </p>
+
+    
+      
+      <div v-if="local" class="space-y-4">
+
+        
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs text-gray-400">Tipo actual</label>
+            <InputText 
+              :value="local.membresia?.nombre" 
+              disabled 
+              class="mt-1 w-full"
+            />
+          </div>
+
+          <div>
+            <label class="text-xs text-gray-400">Precio actual</label>
+            <InputText 
+              :value="'$' + local.membresia?.precio" 
+              disabled 
+              class="mt-1 w-full"
+            />
+          </div>
+        </div>
+
+        
+        <div>
+          <label class="text-xs text-gray-400">Nuevo tipo de membresía</label>
+          <Dropdown
+            v-model="nuevoTipo"
+            :options="tipos"
+            optionLabel="nombre"
+            optionValue="id"
+            placeholder="Seleccionar tipo"
+            class="w-full mt-1"
+            :class="{ 'p-invalid': submitted && !nuevoTipo }"
+          />
+          <small v-if="submitted && !nuevoTipo" class="p-error">
+            Selecciona un tipo
+          </small>
+        </div>
+
       </div>
 
-      <div class="col-6 mb-3">
-        <label class="text-xs text-blue-400 ml-1">Precio actual</label>
-        <InputText :value="'$' + local.membresia?.precio" disabled class="mt-1" />
-      </div>
-
-      <div class="col-12 mb-3">
-        <label class="text-xs text-blue-400 ml-1">Nuevo tipo de membresía</label>
-        <Dropdown
-          v-model="nuevoTipo"
-          :options="tipos"
-          optionLabel="nombre"
-          optionValue="id"
-          placeholder="Seleccionar tipo"
-          class="w-full mt-1"
-          :class="{ 'p-invalid': submitted && !nuevoTipo }"
-        />
-        <small v-if="submitted && !nuevoTipo" class="p-error">Selecciona un tipo</small>
+      <!-- Botón -->
+      <div class="mt-6">
+        <button
+          class="w-full bg-cyan-500 hover:bg-cyan-600 text-black font-semibold py-2.5 rounded-lg transition"
+          @click="handleSave"
+          :disabled="saving"
+        >
+          {{ saving ? 'Guardando...' : 'Guardar cambios' }}
+        </button>
       </div>
 
     </div>
-
-    <template #footer>
-      <div class="flex justify-content-center pb-3">
-        <Button label="Guardar" class="p-button-cyan w-6" @click="handleSave" :loading="saving" />
-      </div>
-    </template>
   </Dialog>
 </template>
 
@@ -83,17 +127,37 @@ const handleSave = async () => {
 </script>
 
 <style scoped>
+:deep(.p-dialog-mask) {
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+:deep(.p-dialog-content) {
+  background: transparent !important;
+  padding: 0;
+  border-radius: 16px;
+}
+
+/* Inputs */
 :deep(.p-inputtext),
 :deep(.p-dropdown) {
-  background: #ffffff !important;
-  color: #111820 !important;
-  padding: 0.75rem !important;
-  border-radius: 6px !important;
-  width: 100% !important;
+  background: #1e293b !important; /* slate-800 */
+  color: #fff !important;
+  border: 1px solid #334155 !important;
+  padding: 0.6rem !important;
+  border-radius: 8px !important;
 }
-:deep(.p-dropdown .p-dropdown-label) { color: #111820 !important; }
-.p-error { color: #f87171 !important; font-size: 0.7rem; margin-top: 4px; font-weight: bold; display: block; }
-:deep(.p-dialog-header) { background: #0d1520; color: white; border-bottom: 1px solid rgba(79,195,247,0.2); }
-:deep(.p-dialog-content) { background: #0d1520; }
-:deep(.p-dialog-footer) { background: #0d1520; border-top: none; }
+
+/* Placeholder dropdown */
+:deep(.p-dropdown .p-dropdown-label) {
+  color: #cbd5f5 !important;
+}
+
+/* Error */
+.p-error {
+  color: #f87171 !important;
+  font-size: 0.7rem;
+  margin-top: 4px;
+  font-weight: bold;
+}
 </style>
