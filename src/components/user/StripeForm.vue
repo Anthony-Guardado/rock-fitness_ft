@@ -5,7 +5,7 @@
       Pagar membresía
     </h3>
 
-    <!-- Stripe insertará aquí el input de tarjeta -->
+    <!-- Donde se ingresan los datos de la tarjeta-->
     <div id="card-element" class="bg-white rounded-lg p-3"></div>
 
     <Button

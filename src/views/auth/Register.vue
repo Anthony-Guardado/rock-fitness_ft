@@ -126,18 +126,18 @@ const handleImage = (event) => {
   imageFile.value = event.target.files[0];
 };
 
-//funcion principal cuando tocamos el boton de registrarse
+
 const sendRegister = async () => {
   loading.value = true;
   errorMessage.value = null;
 
-  // Expresiones regulares para validar los campos
+  // Expresiones regulares
   const regexTexto = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{2,50}$/;
   const regexDui = /^\d{8}-\d$/;
   const regexTelefono = /^[267]\d{3}-?\d{4}$/;
   const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  // mensajes de validacion de las expresiones
+
   if (!regexTexto.test(form.nombre)) {
     errorMessage.value = "El nombre solo debe contener letras.";
     loading.value = false; return;
@@ -168,7 +168,7 @@ const sendRegister = async () => {
   }
 
   try {
-    // Los datos no van en JSON no puede transportar archivos físicos
+
     const formData = new FormData();
     formData.append('nombre', form.nombre);
     formData.append('apellido', form.apellido);
@@ -188,7 +188,7 @@ const sendRegister = async () => {
       formData.append('imagenes[]', imageFile.value);
     }
 
-    //al registrarse correctamente nos dijere a dashboard
+    //al registrarse correctamente nos dirigira dashboard
     await authStore.register(formData);
     if (authStore.isAdmin) {
       router.push('/admin/AdminDashboard');

@@ -39,7 +39,8 @@ const emit = defineEmits(['close', 'refresh']);
 const isSaving = ref(false);
 
 const handleDelete = async () => {
-  // 1. Alerta de confirmación
+  //Alerta de confirmación
+
   const result = await Swal.fire({
     title: '¿Estás seguro?',
     text: `¿Deseas eliminar a ${props.user.nombre}? Esta acción no se puede deshacer.`,
@@ -54,32 +55,32 @@ const handleDelete = async () => {
     reverseButtons: true
   });
 
-  // 2. Si el usuario confirma, procedemos
+  //Si el usuario confirma, procedemos
   if (result.isConfirmed) {
     isSaving.value = true;
     try {
       await userService.delete(props.user.id);
-      Swal.fire({ 
-        title: 'Desactivado', 
-        text: 'Usuario movido a la papelera (Soft Delete)', 
-        icon: 'success', 
-        background: '#111820', 
-        color: '#fff', 
-        timer: 2000, 
-        showConfirmButton: false 
+      Swal.fire({
+        title: 'Desactivado',
+        text: 'Usuario movido a la papelera (Soft Delete)',
+        icon: 'success',
+        background: '#111820',
+        color: '#fff',
+        timer: 2000,
+        showConfirmButton: false
       });
-      emit('refresh'); 
+      emit('refresh');
       emit('close');
     } catch (error) {
-      Swal.fire({ 
-        title: 'Error', 
-        text: 'No se pudo eliminar', 
-        icon: 'error', 
-        background: '#111820', 
-        color: '#fff' 
+      Swal.fire({
+        title: 'Error',
+        text: 'No se pudo eliminar',
+        icon: 'error',
+        background: '#111820',
+        color: '#fff'
       });
-    } finally { 
-      isSaving.value = false; 
+    } finally {
+      isSaving.value = false;
     }
   }else{
     emit ('close')

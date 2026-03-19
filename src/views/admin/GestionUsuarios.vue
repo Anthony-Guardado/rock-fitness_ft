@@ -4,21 +4,21 @@
       <h2 class="text-2xl font-bold text-blue-400 tracking-wide uppercase">
         Gestión de Usuarios
       </h2>
-      <Button 
-        label="Nuevo Usuario" 
-        icon="pi pi-user-plus" 
-        class="p-button-cyan shadow-lg" 
-        @click="openAdd" 
+      <Button
+        label="Nuevo Usuario"
+        icon="pi pi-user-plus"
+        class="p-button-cyan shadow-lg"
+        @click="openAdd"
       />
     </div>
 
-    <DataTable 
-      :value="users" 
-      :loading="loading" 
-      class="rock-table" 
-      :rows="rows" 
+    <DataTable
+      :value="users"
+      :loading="loading"
+      class="rock-table"
+      :rows="rows"
       :rowsPerPageOptions="[5,10,15,20]"
-      paginator 
+      paginator
       paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       currentPageReportTemplate="Mostrando {first} a {last}+ de {totalRecords}"
       responsiveLayout="stack"
@@ -33,12 +33,12 @@
       <Column field="email" header="Email" />
       <Column field="telefono" header="Teléfono" />
       <Column field="dui" header="DUI" />
-      
+
       <Column field="roles" header="Rol">
         <template #body="{ data }">
-          <Tag 
-            :value="data.roles && data.roles.length > 0 ? data.roles[0].name : 'CLIENTE'" 
-            :severity="getSeverity(data.roles)" 
+          <Tag
+            :value="data.roles && data.roles.length > 0 ? data.roles[0].name : 'CLIENTE'"
+            :severity="getSeverity(data.roles)"
           />
         </template>
       </Column>
@@ -46,16 +46,16 @@
       <Column header="Acciones" class="w-10rem">
         <template #body="{ data }">
           <div class="flex gap-2">
-            <Button 
-              icon="pi pi-pencil" 
-              class="p-button-rounded p-button-warning p-button-text" 
-              @click="openEdit(data)" 
+            <Button
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-warning p-button-text"
+              @click="openEdit(data)"
               v-tooltip.top="'Editar'"
             />
-            <Button 
-              icon="pi pi-trash" 
-              class="p-button-rounded p-button-danger p-button-text" 
-              @click="openDelete(data)" 
+            <Button
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger p-button-text"
+              @click="openDelete(data)"
               v-tooltip.top="'Desactivar'"
             />
           </div>
@@ -63,24 +63,24 @@
       </Column>
     </DataTable>
 
-    <AddUserDialog 
-      :visible="showAdd" 
-      @close="showAdd = false" 
-      @refresh="fetchUsers" 
+    <AddUserDialog
+      :visible="showAdd"
+      @close="showAdd = false"
+      @refresh="fetchUsers"
     />
-    
-    <EditUserDialog 
-      :visible="showEdit" 
-      :user="selectedUser" 
-      @close="showEdit = false" 
-      @refresh="fetchUsers" 
+
+    <EditUserDialog
+      :visible="showEdit"
+      :user="selectedUser"
+      @close="showEdit = false"
+      @refresh="fetchUsers"
     />
-    
-    <DeleteUserDialog 
-      :visible="showDelete" 
-      :user="selectedUser" 
-      @close="showDelete = false" 
-      @refresh="fetchUsers" 
+
+    <DeleteUserDialog
+      :visible="showDelete"
+      :user="selectedUser"
+      @close="showDelete = false"
+      @refresh="fetchUsers"
     />
   </div>
 </template>
@@ -114,8 +114,6 @@ const fetchUsers = async () => {
     users.value = data;
   } catch (error) {
     console.error("Error al cargar usuarios:", error);
-    // Aquí podrías disparar un SweetAlert si el error es 401 (No autorizado)
-  } finally {
     loading.value = false;
   }
 };
@@ -140,7 +138,7 @@ const openDelete = (user) => {
   showDelete.value = true;
 };
 
-// Estilo de los Tags según el Rol
+
 const getSeverity = (roles) => {
   if (!roles || roles.length === 0) return 'info';
   const roleName = roles[0].name.toUpperCase();
@@ -154,7 +152,7 @@ const getSeverity = (roles) => {
 </script>
 
 <style>
-/* Estilos para mantener la estética oscura y azul */
+
 .rock-table.p-datatable {
   background: #0d1520 !important;
   border-radius: 12px;

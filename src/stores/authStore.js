@@ -54,8 +54,7 @@ export const useAuthStore = defineStore("auth", {
           showConfirmButton: false,
           timer: 1200,
         });
-        // Es buena práctica limpiar los headers de axios aquí también
-        // si tu servicio 'api' no lo hace automáticamente al resetear.
+      
       }
     },
   },
