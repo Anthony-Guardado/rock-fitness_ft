@@ -19,7 +19,7 @@
       <!-- Name badge -->
       <div class="flex items-center gap-2 bg-cyan-500/[0.06] border border-cyan-500/20 rounded-lg px-6 py-2.5 min-w-[220px] justify-center">
         <span class="text-xs text-slate-400 font-medium tracking-wide">Administrador:</span>
-        <span class="text-sm font-semibold text-slate-100">{{ adminName }}</span>
+        <span class="text-sm font-semibold text-slate-100">{{ userName }}</span>
       </div>
 
     </div>
@@ -27,8 +27,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const adminName = ref('Juan Pérez')
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+
+const authStore = useAuthStore()
+
+const userName = computed(() => authStore.user?.name || 'ADMIN')
+
 </script>
 
 <style scoped>
