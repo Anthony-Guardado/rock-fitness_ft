@@ -36,5 +36,12 @@ export const userService = {
 
   restore(id) {
     return api.post(`/users/${id}/restore`)
-  }
+  },
+
+  updateUser(id, formData) {
+  return api.post(`/user/${id}?_method=PUT`, formData)
 }
+
+
+}
+

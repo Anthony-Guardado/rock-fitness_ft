@@ -56,7 +56,12 @@ export const membresiaService = {
 
   seleccionar(datos) {
     return api.post('/detalle_membresias/seleccionar', datos);
-  }
+  },
+
+  cambiarEstadoUser(id, datos) {
+    return api.patch(`/detalle_membresias/${id}/estado`, datos)
+  },
+
 }
 
 export default membresiaService;

@@ -243,7 +243,7 @@ const validar = () => {
 
 
 const guardarPerfil = async () => {
- if (!validar()) return   
+ if (!validar()) return
 
   loadingPerfil.value = true
   try {
@@ -257,7 +257,7 @@ const guardarPerfil = async () => {
       formData.append('imagenes[]', fotoFile.value)
     }
 
-    const { status, data } = await userService.update(authStore.user.id, formData)
+    const { status, data } = await userService.updateUser(authStore.user.id, formData)
 
     if (status === 200) {
       usuario.value = data.user
@@ -275,7 +275,7 @@ const guardarPerfil = async () => {
 const cancelarMembresia = async () => {
   loadingCancelar.value = true
   try {
-    const { status, data } = await membresiaService.cambiarEstado(authStore.user.id, {
+    const { status, data } = await membresiaService.cambiarEstadoUser(authStore.user.id, {
       estado: 'cancelada'
     })
 
