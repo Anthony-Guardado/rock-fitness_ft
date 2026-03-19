@@ -1,84 +1,88 @@
 <template>
-  <Dialog
-    :visible="visible"
-    modal
-    :style="{ width: '560px' }"
-    :closable="false"
-    class="rock-dialog"
-    @update:visible="$emit('close')">
-
-    <template #header>
-      <div class="flex items-center justify-between w-full">
-        <span class="text-sm font-bold tracking-widest text-slate-100">ELIMINAR USUARIO</span>
-        <Button icon="pi pi-times" rounded text severity="danger" @click="$emit('close')" class="!w-7 !h-7" />
+  <Dialog :visible="visible" modal header="ELIMINAR USUARIO" :style="{ width: '500px' }" @update:visible="$emit('close')">
+    <div class="grid p-fluid" v-if="user">
+        <div class="col-6 mb-3">
+        <InputText :value="user.nombre" disabled />
       </div>
-    </template>
-
-    <div class="grid grid-cols-2 gap-4 pt-2">
-      <InputText v-model="form.nombre"   placeholder="Nombre"   class="rock-input" />
-      <InputText v-model="form.telefono" placeholder="Teléfono" class="rock-input" />
-      <InputText v-model="form.apellido" placeholder="Apellido" class="rock-input" />
-      <InputText v-model="form.dui"      placeholder="DUI"      class="rock-input" />
-      <InputText v-model="form.email"    placeholder="Email"    class="rock-input col-span-2" />
+      <div class="col-6 mb-3">
+        <InputText :value="user.telefono" disabled />
+      </div>
+      <div class="col-6 mb-3">
+        <InputText :value="user.apellido" disabled />
+      </div>
+      <div class="col-6 mb-3">
+        <InputText :value="user.dui" disabled />
+      </div>
+      <div class="col-12 mb-3">
+        <InputText :value="user.email" disabled />
+      </div>
     </div>
-
     <template #footer>
-      <div class="flex justify-center pt-2">
-        <Button label="Eliminar" severity="danger" class="!px-12" @click="handleEliminar" />
+      <div class="flex justify-center">
+        <Button label="Eliminar" class="p-button-danger w-6" @click="handleDelete" :loading="isSaving" />
       </div>
     </template>
   </Dialog>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import Dialog    from 'primevue/dialog'
-import Button    from 'primevue/button'
-import InputText from 'primevue/inputtext'
+import { ref } from 'vue';
+import { userService } from '@/services/userService';
+import Swal from 'sweetalert2';
 
-const props = defineProps({ visible: Boolean, user: Object })
-defineEmits(['close'])
+import Dialog from 'primevue/dialog';
+import InputText from 'primevue/inputtext';
+import Button from 'primevue/button';
 
-const form = ref({ nombre: '', apellido: '', email: '', telefono: '', dui: '' })
+const props = defineProps(['visible', 'user']);
+const emit = defineEmits(['close', 'refresh']);
+const isSaving = ref(false);
 
-watch(() => props.user, (val) => {
-  if (val) form.value = { ...val }
-}, { immediate: true })
+const handleDelete = async () => {
+  // 1. Alerta de confirmación
+  const result = await Swal.fire({
+    title: '¿Estás seguro?',
+    text: `¿Deseas eliminar a ${props.user.nombre}? Esta acción no se puede deshacer.`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar',
+    background: '#111820',
+    color: '#fff',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    reverseButtons: true
+  });
 
-const handleEliminar = () => {
-  console.log('Eliminar usuario:', form.value)
-}
+  // 2. Si el usuario confirma, procedemos
+  if (result.isConfirmed) {
+    isSaving.value = true;
+    try {
+      await userService.delete(props.user.id);
+      Swal.fire({ 
+        title: 'Desactivado', 
+        text: 'Usuario movido a la papelera (Soft Delete)', 
+        icon: 'success', 
+        background: '#111820', 
+        color: '#fff', 
+        timer: 2000, 
+        showConfirmButton: false 
+      });
+      emit('refresh'); 
+      emit('close');
+    } catch (error) {
+      Swal.fire({ 
+        title: 'Error', 
+        text: 'No se pudo eliminar', 
+        icon: 'error', 
+        background: '#111820', 
+        color: '#fff' 
+      });
+    } finally { 
+      isSaving.value = false; 
+    }
+  }else{
+    emit ('close')
+  }
+};
 </script>
-
-<style>
-.rock-dialog .p-dialog {
-  background: #111820 !important;
-  border: 1px solid rgba(79,195,247,0.2) !important;
-  border-radius: 14px !important;
-}
-.rock-dialog .p-dialog-header {
-  background: #111820 !important;
-  padding: 20px 24px 12px !important;
-}
-.rock-dialog .p-dialog-content {
-  background: #111820 !important;
-  padding: 0 24px 8px !important;
-}
-.rock-dialog .p-dialog-footer {
-  background: #111820 !important;
-  padding: 8px 24px 24px !important;
-  border-top: none !important;
-}
-.rock-input.p-inputtext {
-  background: #0d1520 !important;
-  border: 1px solid rgba(79,195,247,0.2) !important;
-  color: #c8dde8 !important;
-  border-radius: 8px !important;
-  width: 100% !important;
-}
-.rock-input.p-inputtext::placeholder { color: #4a6070 !important; }
-.rock-input.p-inputtext:focus {
-  border-color: rgba(79,195,247,0.5) !important;
-  box-shadow: none !important;
-}
-</style>

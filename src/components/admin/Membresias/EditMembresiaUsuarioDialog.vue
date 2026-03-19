@@ -1,109 +1,99 @@
 <template>
-  <Dialog
-    :visible="visible"
-    modal
-    :style="{ width: '520px' }"
-    :closable="false"
-    class="rock-dialog"
-    @update:visible="$emit('close')">
+  <Dialog :visible="visible" modal header="EDITAR MEMBRESÍA USUARIO" :style="{ width: '420px' }" @update:visible="$emit('close')">
+    <div class="grid p-fluid mt-2" v-if="local">
 
-    <template #header>
-      <div class="flex items-center justify-between w-full">
-        <span class="text-sm font-bold tracking-widest text-slate-100">EDITAR MEMBRESIA</span>
-        <Button icon="pi pi-times" rounded text severity="danger" @click="$emit('close')" class="!w-7 !h-7" />
+      <div class="col-6 mb-3">
+        <label class="text-xs text-blue-400 ml-1">Cliente</label>
+        <InputText :value="local.user?.nombre + ' ' + local.user?.apellido" disabled class="mt-1" />
       </div>
-    </template>
 
-    <div class="grid grid-cols-2 gap-4 pt-2">
-      <InputText v-model="form.cliente" placeholder="Nombre del cliente" class="rock-input" />
-      <Dropdown
-        v-model="form.tipo"
-        :options="tiposMembresia"
-        placeholder="Tipo de membresía"
-        class="rock-dropdown w-full" />
+      <div class="col-6 mb-3">
+        <label class="text-xs text-blue-400 ml-1">Tipo actual</label>
+        <InputText :value="local.membresia?.nombre" disabled class="mt-1" />
+      </div>
+
+      <div class="col-12 mb-3">
+        <label class="text-xs text-blue-400 ml-1">Nuevo tipo de membresía</label>
+        <Dropdown
+          v-model="nuevoTipo"
+          :options="tipos"
+          optionLabel="nombre"
+          optionValue="id"
+          placeholder="Seleccionar tipo"
+          class="w-full mt-1"
+          :class="{ 'p-invalid': submitted && !nuevoTipo }"
+        />
+        <small v-if="submitted && !nuevoTipo" class="p-error">Selecciona un tipo</small>
+      </div>
+
     </div>
 
     <template #footer>
-      <div class="flex justify-center pt-2">
-        <Button label="Guardar" class="!bg-cyan-500 !border-cyan-500 !px-12" @click="handleGuardar" />
+      <div class="flex justify-content-center pb-3">
+        <Button label="Guardar" class="p-button-cyan w-6" @click="handleSave" :loading="saving" />
       </div>
     </template>
   </Dialog>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import Dialog    from 'primevue/dialog'
-import Button    from 'primevue/button'
-import InputText from 'primevue/inputtext'
-import Dropdown  from 'primevue/dropdown'
+import { ref, watch, onMounted } from 'vue';
+import { useMembresiaStore } from '@/stores/membresiaStore';
+import { membresiaService } from '@/services/membresiaService';
+import Dialog from 'primevue/dialog';
+import InputText from 'primevue/inputtext';
+import Dropdown from 'primevue/dropdown';
+import Button from 'primevue/button';
 
-const props = defineProps({ visible: Boolean, membresia: Object })
-defineEmits(['close'])
+const props = defineProps(['visible', 'membresia']);
+const emit = defineEmits(['close']);
+const store = useMembresiaStore();
 
-const tiposMembresia = ['Básica', 'Premium', 'VIP']
-const form = ref({ cliente: '', tipo: null })
+const local = ref(null);
+const nuevoTipo = ref(null);
+const tipos = ref([]);
+const saving = ref(false);
+const submitted = ref(false);
+
+onMounted(async () => {
+  try {
+    const { data } = await membresiaService.getTipos();
+    tipos.value = data.data ?? data;
+  } catch {
+    tipos.value = [];
+  }
+});
 
 watch(() => props.membresia, (val) => {
-  if (val) form.value = { cliente: val.cliente || '', tipo: val.tipo || null }
-}, { immediate: true })
+  if (val) {
+    local.value = { ...val, membresia: { ...val.membresia } };
+    nuevoTipo.value = val.membresia_id;
+    submitted.value = false;
+  }
+});
 
-const handleGuardar = () => {
-  console.log('Editar membresía usuario:', form.value)
-}
+const handleSave = async () => {
+  submitted.value = true;
+  if (!nuevoTipo.value) return;
+  saving.value = true;
+  const ok = await store.cambiarTipo(local.value.usuario_id, nuevoTipo.value);
+  saving.value = false;
+  if (ok) emit('close');
+};
 </script>
 
-<style>
-.rock-dialog .p-dialog {
-  background: #111820 !important;
-  border: 1px solid rgba(79,195,247,0.2) !important;
-  border-radius: 14px !important;
-}
-.rock-dialog .p-dialog-header {
-  background: #111820 !important;
-  padding: 20px 24px 12px !important;
-}
-.rock-dialog .p-dialog-content {
-  background: #111820 !important;
-  padding: 0 24px 8px !important;
-}
-.rock-dialog .p-dialog-footer {
-  background: #111820 !important;
-  padding: 8px 24px 24px !important;
-  border-top: none !important;
-}
-.rock-input.p-inputtext {
-  background: #0d1520 !important;
-  border: 1px solid rgba(79,195,247,0.2) !important;
-  color: #c8dde8 !important;
-  border-radius: 8px !important;
+<style scoped>
+:deep(.p-inputtext),
+:deep(.p-dropdown) {
+  background: #ffffff !important;
+  color: #111820 !important;
+  padding: 0.75rem !important;
+  border-radius: 6px !important;
   width: 100% !important;
 }
-.rock-input.p-inputtext::placeholder { color: #4a6070 !important; }
-.rock-input.p-inputtext:focus {
-  border-color: rgba(79,195,247,0.5) !important;
-  box-shadow: none !important;
-}
-.rock-dropdown.p-dropdown {
-  background: #0d1520 !important;
-  border: 1px solid rgba(79,195,247,0.2) !important;
-  border-radius: 8px !important;
-}
-.rock-dropdown.p-dropdown .p-dropdown-label {
-  color: #4a6070 !important;
-}
-.rock-dropdown.p-dropdown.p-focus {
-  border-color: rgba(79,195,247,0.5) !important;
-  box-shadow: none !important;
-}
-.p-dropdown-panel {
-  background: #0d1520 !important;
-  border: 1px solid rgba(79,195,247,0.2) !important;
-}
-.p-dropdown-panel .p-dropdown-item {
-  color: #c8dde8 !important;
-}
-.p-dropdown-panel .p-dropdown-item:hover {
-  background: rgba(79,195,247,0.08) !important;
-}
+:deep(.p-dropdown .p-dropdown-label) { color: #111820 !important; }
+.p-error { color: #f87171 !important; font-size: 0.7rem; margin-top: 4px; font-weight: bold; display: block; }
+:deep(.p-dialog-header) { background: #0d1520; color: white; border-bottom: 1px solid rgba(79,195,247,0.2); }
+:deep(.p-dialog-content) { background: #0d1520; }
+:deep(.p-dialog-footer) { background: #0d1520; border-top: none; }
 </style>
