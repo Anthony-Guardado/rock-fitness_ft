@@ -1,29 +1,47 @@
-import api from './api'
+import api from '@/services/api'
 
-export default {
-  getAll() {
-    return api.get('/user')
+export const userService = {
+  async getAll() {
+    const { data } = await api.get('/user')
+    return data
+  },
+
+  async create(userData) {
+    const formData = new FormData()
+    formData.append('user', JSON.stringify(userData))
+    const { data } = await api.post('/user', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+    return data
+  },
+
+  async update(id, userData) {
+    const formData = new FormData()
+    formData.append('user', JSON.stringify(userData))
+    formData.append('_method', 'PUT')
+    const { data } = await api.post(`/user/${id}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
+    return data
+  },
+
+  async delete(id) {
+    const { data } = await api.delete(`/user/${id}`)
+    return data
   },
 
   getPerfil(id) {
     return api.get(`/user/${id}`)
   },
 
-  store(formData) {
-    return api.post('/user', formData)
-  },
-
-  update(id, formData) {
-    return api.post(`/user/${id}?_method=PUT`, formData)
-  },
-
-  destroy(id) {
-    return api.delete(`/user/${id}`)
-  },
-
   restore(id) {
     return api.post(`/users/${id}/restore`)
-  }
+  },
+
+  updateUser(id, formData) {
+  return api.post(`/user/${id}?_method=PUT`, formData)
 }
 
+
+}
 

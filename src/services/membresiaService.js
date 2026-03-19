@@ -1,28 +1,67 @@
-import api from './api'
+import axios from 'axios';
+import api from '@/services/api';
+import { useAuthStore } from '@/stores/authStore';
 
-export default {
+const API_URL = 'http://127.0.0.1:8000/api';
 
-    getMiMembresia() {
-        return api.get(`/detalle_membresias/miMembresia`)
-    },
+export const membresiaService = {
 
-    getMembresias() {
-        return api.get('/membresias')
-    },
+  getAll() {
+    const authStore = useAuthStore();
+    const token = authStore.token;
+    return axios.get(`${API_URL}/detalle_membresias`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  },
 
-    crearDetalle(datos) {
-        return api.post('/detalle_membresias', datos)
-    },
+  cambiarEstado(usuario_id, estado) {
+    const authStore = useAuthStore();
+    const token = authStore.token;
+    return axios.patch(`${API_URL}/detalle_membresias/${usuario_id}/estado`, { estado }, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  },
 
-    cambiarPlan(id, datos) {
-        return api.patch(`/detalle_membresias/${id}/cambiar`, datos)
-    },
+  getTipos() {
+    const authStore = useAuthStore();
+    const token = authStore.token;
+    return axios.get(`${API_URL}/membresias`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  },
 
-    cambiarEstado(id, datos) {
-        return api.patch(`/detalle_membresias/${id}/estado`, datos)
-    },
+  updateTipo(usuario_id, data) {
+    const authStore = useAuthStore();
+    const token = authStore.token;
+    return axios.patch(`${API_URL}/detalle_membresias/${usuario_id}/cambiar`, data, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  },
 
-    seleccionar(datos) {
-    return api.post('/detalle_membresias/seleccionar', datos)
+  getMiMembresia() {
+    return api.get('/detalle_membresias/miMembresia');
+  },
+
+  getMembresias() {
+    return api.get('/membresias');
+  },
+
+  crearDetalle(datos) {
+    return api.post('/detalle_membresias', datos);
+  },
+
+  cambiarPlan(id, datos) {
+    return api.patch(`/detalle_membresias/${id}/cambiar`, datos);
+  },
+
+  seleccionar(datos) {
+    return api.post('/detalle_membresias/seleccionar', datos);
+  },
+
+  cambiarEstadoUser(id, datos) {
+    return api.patch(`/detalle_membresias/${id}/estado`, datos)
+  },
+
 }
-}
+
+export default membresiaService;
